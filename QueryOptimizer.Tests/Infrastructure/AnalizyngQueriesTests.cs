@@ -21,8 +21,6 @@ namespace QueryOptimizer.Tests.Infrastructure
 
             var plan = await executor.GetExecutionPlanAsync(sql, null, CancellationToken.None);
 
-            File.WriteAllText("C:\\Users\\RuslanVovchok(Ext)\\OneDrive - Tietoevry\\Desktop\\executionplan.txt", plan);
-
             Assert.NotNull(plan);
         }
 
