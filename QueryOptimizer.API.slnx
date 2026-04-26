@@ -1,3 +1,31 @@
 <Solution>
-  <Project Path="QueryOptimizer.API/QueryOptimizer.API.csproj" />
+  <Folder Name="/API/">
+    <Project Path="QueryOptimizer.API/QueryOptimizer.API.csproj" />
+  </Folder>
+  <Folder Name="/Database/">
+    <Project Path="QueryOptimizer.Database/QueryOptimizer.Database.sqlproj" Id="ef6e56fe-a537-499e-913f-7a2e585f82ae">
+      <Build />
+      <Deploy />
+    </Project>
+  </Folder>
+  <Folder Name="/Domain/">
+    <Project Path="QueryOptimizer.Bll/QueryOptimizer.Bll.csproj" Id="b3d680ea-99cf-4b8c-af0c-a68ac9656e1d" />
+    <Project Path="QueryOptimizer.Models/QueryOptimizer.Models.csproj" Id="d9dc1a02-67aa-4009-97cc-1ca1f7e39361" />
+    <Project Path="QueryOptimizer.Repositories/QueryOptimizer.Repositories.csproj" Id="964bd4db-270c-4e3d-aef2-abde4f95135b" />
+  </Folder>
+  <Folder Name="/Infrastructure/">
+    <Project Path="QueryOptimizer.DbExecutor/QueryOptimizer.DatabaseExecutor.csproj" />
+  </Folder>
+  <Folder Name="/Infrastructure/Providers/">
+    <Project Path="QueryOptimizer.Connectivity.Oracle/QueryOptimizer.Providers.Oracle.csproj" />
+    <Project Path="QueryOptimizer.Connectivity.PostgreSQL/QueryOptimizer.Providers.PostgreSQL.csproj" />
+    <Project Path="QueryOptimizer.Connectivity.SQLServer/QueryOptimizer.Providers.SQLServer.csproj" />
+  </Folder>
+  <Folder Name="/Shared/">
+    <Project Path="QueryOptimizer.DependencyInjection/QueryOptimizer.DependencyInjection.csproj" Id="8675a94b-56be-44a6-842c-86e0a5478f7a" />
+    <Project Path="QueryOptimizer.Shared/QueryOptimizer.Shared.csproj" Id="bd0420b6-b212-4fe0-8340-1effbb23930c" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="QueryOptimizer.Tests/QueryOptimizer.Tests.csproj" Id="cc6b0c40-275e-417f-b181-6c8f3f37cb83" />
+  </Folder>
 </Solution>

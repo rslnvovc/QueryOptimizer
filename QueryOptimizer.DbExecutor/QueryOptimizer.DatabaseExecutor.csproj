@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\QueryOptimizer.Connectivity.Oracle\QueryOptimizer.Connectivity.Oracle.csproj" />
+    <ProjectReference Include="..\QueryOptimizer.Connectivity.Oracle\QueryOptimizer.Providers.Oracle.csproj" />
+    <ProjectReference Include="..\QueryOptimizer.Connectivity.PostgreSQL\QueryOptimizer.Connectivity.PostgreSQL.csproj" />
+    <ProjectReference Include="..\QueryOptimizer.Connectivity.PostgreSQL\QueryOptimizer.Providers.PostgreSQL.csproj" />
+    <ProjectReference Include="..\QueryOptimizer.Connectivity.SQLServer\QueryOptimizer.Connectivity.SQLServer.csproj" />
+    <ProjectReference Include="..\QueryOptimizer.Connectivity.SQLServer\QueryOptimizer.Providers.SQLServer.csproj" />
+    <ProjectReference Include="..\QueryOptimizer.Shared\QueryOptimizer.Shared.csproj" />
+  </ItemGroup>
+
+</Project>
