@@ -22,6 +22,7 @@
     <Project Path="QueryOptimizer.Connectivity.SQLServer/QueryOptimizer.Providers.SQLServer.csproj" />
   </Folder>
   <Folder Name="/Shared/">
+    <Project Path="QueryOptimizer.Caching/QueryOptimizer.Caching.csproj" Id="b447a0a5-7fea-4a1b-9812-2302237c928d" />
     <Project Path="QueryOptimizer.DependencyInjection/QueryOptimizer.DependencyInjection.csproj" Id="8675a94b-56be-44a6-842c-86e0a5478f7a" />
     <Project Path="QueryOptimizer.Shared/QueryOptimizer.Shared.csproj" Id="bd0420b6-b212-4fe0-8340-1effbb23930c" />
   </Folder>

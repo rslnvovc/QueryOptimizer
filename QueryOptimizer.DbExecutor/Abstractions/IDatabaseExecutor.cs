@@ -1,4 +1,5 @@
-﻿using QueryOptimizer.Shared.Common.Models.Metrics;
+﻿using QueryOptimizer.Shared.Common.Models.ExecutionPlan;
+using QueryOptimizer.Shared.Common.Models.Metrics;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,5 +19,7 @@ namespace QueryOptimizer.DatabaseExecutor.Abstractions
 
         Task<QueryPerformanceMetrics> AnalyzeAsync(string sql, Dictionary<string, object> parameters, CancellationToken cancellationToken = default);
         Task<string> GetExecutionPlanAsync(string sql, Dictionary<string, object> parameters, CancellationToken cancellationToken = default);
+
+        NormalizedExecutionPlan ParseExecutionPlan(QueryPerformanceMetrics metrics);
     }
 }

@@ -2,10 +2,14 @@
 using QueryOptimizer.DatabaseExecutor.Abstractions;
 using QueryOptimizer.DatabaseExecutor.Helpers;
 using QueryOptimizer.Providers.Oracle.Analyzing;
+using QueryOptimizer.Providers.Oracle.Parsing;
 using QueryOptimizer.Providers.PostgreSQL.Analyzing;
+using QueryOptimizer.Providers.PostgreSQL.Parsing;
 using QueryOptimizer.Providers.SQLServer.Analyzing;
+using QueryOptimizer.Providers.SQLServer.Parsing;
 using QueryOptimizer.Shared.Common.Enums;
 using QueryOptimizer.Shared.Common.Exceptions.Database;
+using QueryOptimizer.Shared.Common.Models.ExecutionPlan;
 using QueryOptimizer.Shared.Common.Models.Metrics;
 using QueryOptimizer.Shared.Infrastructure.Abstractions;
 using System;
@@ -25,6 +29,7 @@ namespace QueryOptimizer.DatabaseExecutor
 
         private readonly IDatabaseSource _dbSource;
         private readonly IQueryPerformanceAnalyzer _queryPerformanceOptimizer;
+        private readonly IExecutionPlanParser _executionPlanParser;
 
         public int CommandTimeout { get; set; }
 
@@ -36,12 +41,15 @@ namespace QueryOptimizer.DatabaseExecutor
             {
                 case DatabaseTypes.SqlServer:
                     _queryPerformanceOptimizer = new SqlServerQueryPerformanceAnalyzer();
+                    _executionPlanParser = new SqlServerExecutionPlanParser();
                     break;
                 case DatabaseTypes.PostgreSql:
                     _queryPerformanceOptimizer = new PostgreSqlQueryPerformanceAnalyzer();
+                    _executionPlanParser = new PostgresExecutionPlanParser();
                     break;
                 case DatabaseTypes.Oracle:
                     _queryPerformanceOptimizer = new OracleQueryPerformanceAnalyzer();
+                    _executionPlanParser = new OracleExecutionPlanParser();
                     break;
                 default: throw new NotSupportedDBTypeException();
             }
@@ -86,6 +94,9 @@ namespace QueryOptimizer.DatabaseExecutor
             var result = await _queryPerformanceOptimizer.GetEstimatedExecutionPlanAsync(command, cancellationToken);
             return result;
         }
+
+        public NormalizedExecutionPlan ParseExecutionPlan(QueryPerformanceMetrics metrics)
+            => _executionPlanParser.Parse(metrics);
 
         private static void PopulateCommandParameters(IDbCommand command, Dictionary<string, object> parameters)
         {
