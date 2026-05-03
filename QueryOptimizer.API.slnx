@@ -16,6 +16,9 @@
   <Folder Name="/Infrastructure/">
     <Project Path="QueryOptimizer.DbExecutor/QueryOptimizer.DatabaseExecutor.csproj" />
   </Folder>
+  <Folder Name="/Infrastructure/Optimization/">
+    <Project Path="QueryOptimizer.Optimization/QueryOptimizer.Optimization.csproj" Id="8829ab2d-1839-485d-8196-788e8cbf6e98" />
+  </Folder>
   <Folder Name="/Infrastructure/Providers/">
     <Project Path="QueryOptimizer.Connectivity.Oracle/QueryOptimizer.Providers.Oracle.csproj" />
     <Project Path="QueryOptimizer.Connectivity.PostgreSQL/QueryOptimizer.Providers.PostgreSQL.csproj" />
