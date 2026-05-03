@@ -1,4 +1,5 @@
-﻿using Oracle.ManagedDataAccess.Client;
+﻿
+using Oracle.ManagedDataAccess.Client;
 using QueryOptimizer.Shared.Infrastructure;
 using System;
 using System.Collections.Generic;

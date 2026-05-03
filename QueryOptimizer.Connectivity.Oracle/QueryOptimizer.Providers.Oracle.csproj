@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.26.200" />
+    <PackageReference Include="System.Security.Permissions" Version="10.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\QueryOptimizer.Shared\QueryOptimizer.Shared.csproj" />
   </ItemGroup>
 

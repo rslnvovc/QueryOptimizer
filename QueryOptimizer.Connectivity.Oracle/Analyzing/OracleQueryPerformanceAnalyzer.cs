@@ -5,6 +5,7 @@ using QueryOptimizer.Shared.Common.Models.Metrics;
 using QueryOptimizer.Shared.Infrastructure.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
 using System.Text;
@@ -23,10 +24,12 @@ namespace QueryOptimizer.Providers.Oracle.Analyzing
                 ExecutionPlanFormat = ExecutionPlanFormats.Text
             };
 
-            var tag = $"QO_{Guid.NewGuid():N}";
+            var tag = $"QO_{Guid.NewGuid():N}".Substring(0, 28);
             var taggedSql = AddOracleGatherStatisticsHint(command.CommandText, tag);
 
             var stopwatch = Stopwatch.StartNew();
+
+            command.CommandText = taggedSql;
 
             await using var reader = await command.ExecuteReaderAsync(cancellationToken);
 
@@ -69,9 +72,13 @@ namespace QueryOptimizer.Providers.Oracle.Analyzing
 
         public async Task<string> GetEstimatedExecutionPlanAsync(DbCommand command, CancellationToken cancellationToken = default)
         {
-            var planStatementId = $"QO_PLAN_{Guid.NewGuid():N}";
+            var originalCommandText = command.CommandText;
 
-            var explainSql = $"EXPLAIN PLAN SET STATEMENT_ID = '{planStatementId}' FOR {command.CommandText}";
+            var planStatementId = $"QO_PLAN_{Guid.NewGuid():N}".Substring(0, 28);
+
+            var explainSql = $"EXPLAIN PLAN SET STATEMENT_ID = '{planStatementId}' FOR {originalCommandText}";
+
+            command.CommandText = explainSql;
 
             await command.ExecuteNonQueryAsync(cancellationToken);
 
@@ -81,6 +88,8 @@ FROM TABLE(DBMS_XPLAN.DISPLAY(NULL, :statementId, 'TYPICAL'))
 ";
 
             await using var displayCommand = command.Connection.CreateCommand();
+            displayCommand.CommandText = displaySql;
+            displayCommand.CommandType = CommandType.Text;
             displayCommand.Parameters.Add(new OracleParameter("statementId", planStatementId));
 
             var sb = new StringBuilder();

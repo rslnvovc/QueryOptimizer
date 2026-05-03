@@ -68,6 +68,11 @@ namespace QueryOptimizer.Providers.PostgreSQL.Analyzing
 
             if (root.TryGetProperty("Execution Time", out var executionTime))
                 metrics.DatabaseElapsedMs = executionTime.GetDouble();
+
+            if (root.TryGetProperty("Plan", out var plan))
+            {
+                ParsePlanNode(plan, metrics);
+            }
         }
 
         private static void ParsePlanNode(JsonElement node, QueryPerformanceMetrics metrics)
