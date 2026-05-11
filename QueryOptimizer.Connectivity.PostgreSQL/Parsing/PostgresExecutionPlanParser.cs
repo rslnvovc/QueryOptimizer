@@ -1,4 +1,5 @@
-﻿using QueryOptimizer.Shared.Common.Models.ExecutionPlan;
+﻿using QueryOptimizer.Shared.Common.Enums;
+using QueryOptimizer.Shared.Common.Models.ExecutionPlan;
 using QueryOptimizer.Shared.Common.Models.Metrics;
 using QueryOptimizer.Shared.Infrastructure.Abstractions;
 using System;
@@ -11,7 +12,19 @@ namespace QueryOptimizer.Providers.PostgreSQL.Parsing
     {
         public NormalizedExecutionPlan Parse(QueryPerformanceMetrics executionPlan)
         {
-            throw new NotImplementedException();
+            var result = new NormalizedExecutionPlan()
+            {
+                Provider = DatabaseTypes.PostgreSql,
+                RawPlan = executionPlan.ExecutionPlan ?? string.Empty,
+                TotalExecutionTimeMs = executionPlan.DatabaseElapsedMs,
+                TotalLogicalReads = executionPlan.LogicalReads,
+                TotalPhysicalReads = executionPlan.PhysicalReads,
+            };
+
+            if (string.IsNullOrEmpty(result.RawPlan))
+                return result;
+
+            return result;
         }
     }
 }

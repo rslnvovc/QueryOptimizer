@@ -20,5 +20,11 @@ namespace QueryOptimizer.Shared.Common.Models.ExecutionPlan
         public long? TotalLogicalReads { get; set; }
 
         public long? TotalPhysicalReads { get; set; }
+
+        public long? RequestedMemoryKb { get; set; }
+
+        public long? GrantedMemoryKb { get; set; }
+
+        public long? MaxUsedMemoryKb { get; set; }
     }
 }
