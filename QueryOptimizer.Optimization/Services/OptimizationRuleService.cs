@@ -7,11 +7,8 @@ using System.Text;
 
 namespace QueryOptimizer.Optimization.Services
 {
-    public class OptimizationRuleService : IOptimizationRule
+    public class OptimizationRuleService : IOptimizationRuleService
     {
-        public IEnumerable<QueryOptimizationFinding> Analyze(NormalizedExecutionPlan plan, string originalSql)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }

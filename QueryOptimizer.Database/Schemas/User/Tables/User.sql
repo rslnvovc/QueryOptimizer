@@ -1,0 +1,7 @@
+﻿CREATE TABLE [User].[User]
+(
+	[UserId] NVARCHAR(36) NOT NULL,
+	[UserName] NVARCHAR(255) NOT NULL
+
+	CONSTRAINT [PK_User.User] PRIMARY KEY CLUSTERED ([UserId] ASC)
+)

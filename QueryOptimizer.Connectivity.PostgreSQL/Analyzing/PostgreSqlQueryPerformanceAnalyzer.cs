@@ -95,7 +95,7 @@ namespace QueryOptimizer.Providers.PostgreSQL.Analyzing
                 planNode.EstimatedRows = estimatedRows.GetInt64();
 
             if (node.TryGetProperty("Actual Rows", out var actualRows))
-                planNode.ActualRows = actualRows.GetInt64();
+                planNode.ActualRows = (long)actualRows.GetDouble();
 
             if (node.TryGetProperty("Shared Hit Blocks", out var sharedHitBlocks))
                 planNode.LogicalReads = sharedHitBlocks.GetInt64();

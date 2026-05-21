@@ -9,8 +9,7 @@
     <ProjectGuid>{ef6e56fe-a537-499e-913f-7a2e585f82ae}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql170DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
-    <RootPath>
-    </RootPath>
+    <RootPath />
     <RootNamespace>QueryOptimizer.Database</RootNamespace>
     <AssemblyName>QueryOptimizer.Database</AssemblyName>
     <ModelCollation>1033,CI</ModelCollation>
@@ -50,7 +49,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
-    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
     <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
     <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
   </PropertyGroup>
@@ -58,5 +56,22 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="Security" />
+    <Folder Include="Security\Schemas" />
+    <Folder Include="Security\Users" />
+    <Folder Include="Schemas" />
+    <Folder Include="Schemas\User" />
+    <Folder Include="Schemas\Analyzing" />
+    <Folder Include="Schemas\User\Tables" />
+    <Folder Include="Schemas\User\Stored Procedures" />
+    <Folder Include="Schemas\Analyzing\Tables" />
+    <Folder Include="Schemas\Analyzing\Stored Procedures" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Security\Schemas\User.sql" />
+    <Build Include="Security\Users\QueryOptimizer_Admin.sql" />
+    <Build Include="Security\Schemas\Analyzing.sql" />
+    <Build Include="Schemas\User\Tables\User.sql" />
+    <Build Include="Schemas\Analyzing\Tables\Metrics.sql" />
   </ItemGroup>
 </Project>

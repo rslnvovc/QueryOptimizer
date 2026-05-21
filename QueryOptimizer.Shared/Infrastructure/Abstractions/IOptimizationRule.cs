@@ -8,6 +8,8 @@ namespace QueryOptimizer.Shared.Infrastructure.Abstractions
 {
     public interface IOptimizationRule
     {
+        public string Rule { get; }
+
         IEnumerable<QueryOptimizationFinding> Analyze(
             NormalizedExecutionPlan plan,
             string originalSql

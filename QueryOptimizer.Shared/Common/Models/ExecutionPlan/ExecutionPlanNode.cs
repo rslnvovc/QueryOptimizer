@@ -8,15 +8,15 @@ namespace QueryOptimizer.Shared.Common.Models.ExecutionPlan
     {
         public string NodeType { get; set; } = default!;
 
-        public string NormilizedNodeType { get; set; } = default!;
+        public string NormalizedNodeType { get; set; } = default!;
 
-        public string ObjectName { get; set; } = default!;
+        public string? ObjectName { get; set; } = default!;
 
-        public string IndexName { get; set; } = default!;
+        public string? IndexName { get; set; } = default!;
 
-        public string Predicate { get; set; } = default!;
+        public string? Predicate { get; set; } = default!;
 
-        public string JoinType { get; set; } = default!;
+        public string? JoinType { get; set; } = default!;
 
         public double? EstimatedCost { get; set; }
 
