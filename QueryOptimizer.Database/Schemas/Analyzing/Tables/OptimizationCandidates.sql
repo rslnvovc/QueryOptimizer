@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [Analyzing].[OptimizationCandidates]
 (
-	[Id] INT NOT NULL PRIMARY KEY,
+	[Id] INT NOT NULL,
 	QueryAnalysisRunId INT NOT NULL,
 
     RuleCode NVARCHAR(100) NOT NULL,
