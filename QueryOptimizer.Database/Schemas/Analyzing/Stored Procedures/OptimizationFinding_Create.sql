@@ -65,4 +65,11 @@ BEGIN
     );
 
 	COMMIT TRANSACTION;
+
+    DECLARE @NewID INT;
+
+    SELECT @NewID = ISNULL(MAX(ofi.Id), 0)
+    FROM [Analyzing].[OptimizationFindings] ofi WITH(NOLOCK);
+
+    SELECT @NewID;
 END

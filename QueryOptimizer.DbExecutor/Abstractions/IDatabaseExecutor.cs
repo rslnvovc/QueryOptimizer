@@ -21,5 +21,19 @@ namespace QueryOptimizer.DatabaseExecutor.Abstractions
         Task<string> GetExecutionPlanAsync(string sql, Dictionary<string, object> parameters, CancellationToken cancellationToken = default);
 
         NormalizedExecutionPlan ParseExecutionPlan(QueryPerformanceMetrics metrics);
+
+        Task<int> ExecuteNonQueryAsync(string sql, CancellationToken cancellationToken = default);
+        Task<int> ExecuteNonQueryAsync(string sql, Dictionary<string, object> parameters, CancellationToken cancellationToken = default);
+        Task<int> ExecuteNonQueryAsync(string sql, Dictionary<string, object> parameter, CommandType commantType, CancellationToken cancellationToken = default);
+
+        Task<T> ExecuteScalarAsync<T>(string sql, CancellationToken cancellationToken = default);
+        Task<T> ExecuteScalarAsync<T>(string sql, Dictionary<string, object> parameters, CancellationToken cancellationToken = default);
+        Task<T> ExecuteScalarAsync<T>(string sql, Dictionary<string, object> parameters, CommandType commandType, CancellationToken cancellationToken = default);
+
+        Task ExecuteComplexAsync(string sql, Dictionary<string, object> parameters, CommandType commandType, CancellationToken cancellationToken = default, params IList[] res);
+
+        Task<IList<T>> ExecuteQueryAsync<T>(string sql, CancellationToken cancellationToken = default);
+        Task<IList<T>> ExecuteQueryAsync<T>(string sql, Dictionary<string, object> parameters, CancellationToken cancellationToken = default);
+        Task<IList<T>> ExecuteQueryAsync<T>(string sql, Dictionary<string, object> parameters, CommandType commandType, CancellationToken cancellationToken = default);
     }
 }

@@ -98,6 +98,124 @@ namespace QueryOptimizer.DatabaseExecutor
         public NormalizedExecutionPlan ParseExecutionPlan(QueryPerformanceMetrics metrics)
             => _executionPlanParser.Parse(metrics);
 
+        public async Task<int> ExecuteNonQueryAsync(string sql, CancellationToken cancellationToken = default)
+        {
+            return await ExecuteNonQueryAsync(sql, null, cancellationToken);
+        }
+
+        public async Task<int> ExecuteNonQueryAsync(string sql, Dictionary<string, object> parameters, CancellationToken cancellationToken = default)
+        {
+            return await ExecuteNonQueryAsync(sql, parameters, CommandType.StoredProcedure, cancellationToken);
+        }
+
+        public async Task<int> ExecuteNonQueryAsync(string sql, Dictionary<string, object> parameter, CommandType commantType, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                using var command = await GetCommandAsync(sql, parameter, commantType);
+                return await command.ExecuteNonQueryAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<T> ExecuteScalarAsync<T>(string sql, CancellationToken cancellationToken = default)
+        {
+            return await ExecuteScalarAsync<T>(sql, null, cancellationToken);
+        }
+
+        public async Task<T> ExecuteScalarAsync<T>(string sql, Dictionary<string, object> parameters, CancellationToken cancellationToken = default)
+        {
+            return await ExecuteScalarAsync<T>(sql, parameters, CommandType.StoredProcedure, cancellationToken);
+        }
+
+        public async Task<T> ExecuteScalarAsync<T>(string sql, Dictionary<string, object> parameters, CommandType commandType, CancellationToken cancellationToken = default)
+        {
+            object result = null;
+
+            try
+            {
+                using var command = await GetCommandAsync(sql, parameters, commandType);
+                result = (await command.ExecuteScalarAsync(cancellationToken)).GetTypedValue<T>();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return (T)result;
+        }
+
+        public async Task ExecuteComplexAsync(string sql, Dictionary<string, object> parameters, CommandType commandType, CancellationToken cancellationToken = default, params IList[] res)
+        {
+            using var command = await GetCommandAsync(sql, parameters, commandType);
+
+            await using var reader = await command.ExecuteReaderAsync(cancellationToken);
+
+            var resultSetIndex = 0;
+
+            do
+            {
+                if (resultSetIndex >= res.Length)
+                    break;
+
+                var targetList = res[resultSetIndex];
+
+                if (targetList == null)
+                {
+                    resultSetIndex++;
+                    continue;
+                }
+
+                var itemType = ResultSetExtensions.GetListItemType(targetList);
+
+                while (await reader.ReadAsync(cancellationToken))
+                {
+                    var item = ResultSetExtensions.MapReaderRowToObject(reader, itemType);
+                    targetList.Add(item);
+                }
+
+                resultSetIndex++;
+            }
+            while (await reader.NextResultAsync(cancellationToken));
+        }
+
+        public async Task<IList<T>> ExecuteQueryAsync<T>(string sql, CancellationToken cancellationToken = default)
+        {
+            return await ExecuteQueryAsync<T>(
+                sql,
+                null,
+                CommandType.Text,
+                cancellationToken);
+        }
+
+        public async Task<IList<T>> ExecuteQueryAsync<T>(string sql, Dictionary<string, object> parameters, CancellationToken cancellationToken = default)
+        {
+            return await ExecuteQueryAsync<T>(
+                sql,
+                parameters,
+                CommandType.StoredProcedure,
+                cancellationToken);
+        }
+
+        public async Task<IList<T>> ExecuteQueryAsync<T>(string sql, Dictionary<string, object> parameters, CommandType commandType, CancellationToken cancellationToken = default)
+        {
+            var result = new List<T>();
+
+            using var command = await GetCommandAsync(sql, parameters, commandType);
+
+            await using var reader = await command.ExecuteReaderAsync(cancellationToken);
+
+            while (await reader.ReadAsync(cancellationToken))
+            {
+                var item = ResultSetExtensions.MapReaderRowToObject<T>(reader);
+                result.Add(item);
+            }
+
+            return result;
+        }
+
         private static void PopulateCommandParameters(IDbCommand command, Dictionary<string, object> parameters)
         {
             if (parameters != null && parameters.Count != 0)
@@ -120,11 +238,6 @@ namespace QueryOptimizer.DatabaseExecutor
                 }
             }
         }
-
-
-        #region Public Methods
-
-        #endregion
 
         #region IDisposable...
 

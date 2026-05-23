@@ -71,4 +71,11 @@ BEGIN
 
 
 	COMMIT TRANSACTION;
+
+    DECLARE @NewID INT;
+
+    SELECT @NewID = ISNULL(MAX(qem.Id), 0)
+    FROM [Analyzing].[QueryExecutionMetrics] qem WITH(NOLOCK);
+
+    SELECT @NewID;
 END

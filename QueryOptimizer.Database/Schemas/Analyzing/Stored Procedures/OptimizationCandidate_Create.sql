@@ -40,4 +40,11 @@ BEGIN
     );
 
 	COMMIT TRANSACTION;
+
+    DECLARE @NewID INT;
+
+    SELECT @NewID = ISNULL(MAX(oc.Id), 0)
+    FROM [Analyzing].[OptimizationCandidates] oc WITH(NOLOCK);
+
+    SELECT @NewID;
 END

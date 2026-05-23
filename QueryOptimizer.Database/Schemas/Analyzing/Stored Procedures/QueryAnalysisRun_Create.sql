@@ -33,4 +33,11 @@ BEGIN
     );
 
     COMMIT TRANSACTION;
+
+    DECLARE @NewID INT;
+
+    SELECT @NewID = ISNULL(MAX(qar.Id), 0)
+    FROM [Analyzing].[QueryAnalysisRuns] qar WITH(NOLOCK);
+
+    SELECT @NewID;
 END
