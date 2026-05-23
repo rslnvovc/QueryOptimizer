@@ -78,5 +78,18 @@
     <Build Include="Schemas\Analyzing\Tables\OptimizationCandidates.sql" />
     <Build Include="Schemas\Analyzing\Tables\OptimizationExperiences.sql" />
     <Build Include="Schemas\Analyzing\Tables\OptimizationRuleWeights.sql" />
+    <Build Include="Schemas\Analyzing\Stored Procedures\QueryAnalysisRun_Create.sql" />
+    <Build Include="Schemas\Analyzing\Stored Procedures\QueryAnalysisRun_Complete.sql" />
+    <Build Include="Schemas\Analyzing\Stored Procedures\QueryAnalysisRun_Fail.sql" />
+    <Build Include="Schemas\Analyzing\Stored Procedures\QueryExecutionMetric_Create.sql" />
+    <Build Include="Schemas\Analyzing\Stored Procedures\OptimizationFinding_Create.sql" />
+    <Build Include="Schemas\Analyzing\Stored Procedures\OptimizationCandidate_Create.sql" />
+    <Build Include="Schemas\Analyzing\Stored Procedures\OptimizationCandidate_UpdateTestResult.sql" />
+    <Build Include="Schemas\Analyzing\Stored Procedures\OptimizationExperience_Create.sql" />
+    <Build Include="Schemas\Analyzing\Stored Procedures\OptimizationRuleWeight_Upsert.sql" />
+    <Build Include="Schemas\Analyzing\Stored Procedures\QueryAnalysisRun_GetFull.sql" />
+    <Build Include="Schemas\Analyzing\Stored Procedures\QueryAnalysisRuns_GetByUser.sql" />
+    <Build Include="Schemas\Analyzing\Stored Procedures\OptimizationRuleWeights_GetByProvider.sql" />
+    <Build Include="Schemas\Analyzing\Stored Procedures\OptimizationRuleWeight_Get.sql" />
   </ItemGroup>
 </Project>
