@@ -14,4 +14,6 @@
     LogicalReadsImprovementPercent FLOAT NULL,
 
     CreatedAt DATETIME NOT NULL
+
+    CONSTRAINT [PK_Analyzing.OptimizationExperiences] PRIMARY KEY CLUSTERED ([Id] ASC)
 )

@@ -20,6 +20,7 @@ CREATE TABLE [Analyzing].[OptimizationFindings]
 
     CreatedAt DATETIME NOT NULL,
 
+    CONSTRAINT [PK_Analyzing.OptimizationFindings] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT FK_OptimizationFindings_QueryAnalysisRuns
         FOREIGN KEY (QueryAnalysisRunId)
         REFERENCES [Analyzing].[QueryAnalysisRuns](Id)

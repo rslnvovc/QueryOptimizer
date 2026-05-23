@@ -21,6 +21,7 @@
 
     CreatedAt DATETIME NOT NULL,
 
+    CONSTRAINT [PK_Analyzing.QueryExecutionMetrics] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT FK_QueryExecutionMetrics_QueryAnalysisRuns
         FOREIGN KEY ([QueryAnalysisRunId])
         REFERENCES [Analyzing].[QueryAnalysisRuns](Id)
