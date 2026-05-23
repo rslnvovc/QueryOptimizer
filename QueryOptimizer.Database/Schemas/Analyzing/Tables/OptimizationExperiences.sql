@@ -1,0 +1,17 @@
+﻿CREATE TABLE [Analyzing].[OptimizationExperiences]
+(
+	[Id] INT NOT NULL PRIMARY KEY,
+	[Provider] INT NOT NULL,
+    NormalizedSqlHash NVARCHAR(128) NOT NULL,
+    RuleCode NVARCHAR(100) NOT NULL,
+
+    OriginalExecutionTimeMs FLOAT NOT NULL,
+    CandidateExecutionTimeMs FLOAT NOT NULL,
+    ImprovementPercent FLOAT NOT NULL,
+
+    OriginalLogicalReads BIGINT NULL,
+    CandidateLogicalReads BIGINT NULL,
+    LogicalReadsImprovementPercent FLOAT NULL,
+
+    CreatedAt DATETIME NOT NULL
+)

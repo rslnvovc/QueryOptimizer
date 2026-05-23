@@ -17,7 +17,11 @@ namespace QueryOptimizer.Shared.Common.Models.Optimization
 
         public string SuggestedSql { get; set; } = default!;
 
-        public string SuggestedIndexSql { get; set; } = default!;
+        public string? SuggestedIndexSql { get; set; } = default!;
+
+        public string? AffectedObject { get; set; } = default!;
+
+        public string? AffectedNodeType { get; set; } = default!;
 
         public FindingSeverity Severity { get; set; }
     }

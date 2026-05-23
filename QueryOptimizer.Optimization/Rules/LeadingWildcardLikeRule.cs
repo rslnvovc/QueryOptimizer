@@ -9,21 +9,26 @@ using System.Text.RegularExpressions;
 
 namespace QueryOptimizer.Optimization.Rules
 {
-    public class SelectStarRule : IOptimizationRule
+    public class LeadingWildcardLikeRule : IOptimizationRule
     {
-        public string Rule => "SELECT_STAR";
+        public string Rule => "LEADING_WILDCARD_LIKE";
 
         public IEnumerable<QueryOptimizationFinding> Analyze(NormalizedExecutionPlan plan, string originalSql)
         {
-            if (!Regex.IsMatch(originalSql, @"\bselect\s+\*", RegexOptions.IgnoreCase))
+            var hasLeadingWildcardLike = Regex.IsMatch(
+                originalSql,
+                @"\blike\s+N?'%[^']*'",
+                RegexOptions.IgnoreCase);
+
+            if (!hasLeadingWildcardLike)
                 yield break;
 
             yield return new QueryOptimizationFinding()
-            { 
+            {
                 RuleCode = Rule,
-                Title = "Usage of SELECT *",
-                Description = "Using SELECT * can lead to inefficient queries as it retrieves all columns, including those that may not be needed. This can increase I/O and memory usage.",
-                Recommendation = "Specify only the columns that are necessary for your query instead of using SELECT *.",
+                Title = "Leading Wildcard in LIKE",
+                Description = "Usually LIKE condition is not allow effectivly use indexes",
+                Recommendation = "Consider removing leading wildcard from LIKE condition or use full text search if applicable.",
                 Severity = FindingSeverity.Medium
             };
         }

@@ -72,6 +72,11 @@
     <Build Include="Security\Users\QueryOptimizer_Admin.sql" />
     <Build Include="Security\Schemas\Analyzing.sql" />
     <Build Include="Schemas\User\Tables\User.sql" />
-    <Build Include="Schemas\Analyzing\Tables\Metrics.sql" />
+    <Build Include="Schemas\Analyzing\Tables\QueryAnalysisRuns.sql" />
+    <Build Include="Schemas\Analyzing\Tables\QueryExecutionMetrics.sql" />
+    <Build Include="Schemas\Analyzing\Tables\OptimizationFindings.sql" />
+    <Build Include="Schemas\Analyzing\Tables\OptimizationCandidates.sql" />
+    <Build Include="Schemas\Analyzing\Tables\OptimizationExperiences.sql" />
+    <Build Include="Schemas\Analyzing\Tables\OptimizationRuleWeights.sql" />
   </ItemGroup>
 </Project>
