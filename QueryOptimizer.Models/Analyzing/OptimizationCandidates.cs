@@ -1,0 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace QueryOptimizer.Models.Analyzing
+{
+    public class OptimizationCandidates
+    {
+        public int Id { get; set; }
+        public int QueryAnalysisRunId { get; set; }
+        public string RuleCode { get; set; } = default!;
+        public string CandidateSql { get; set; } = default!;
+        public string? Description { get; set; }
+        public bool WasTested { get; set; }
+        public bool IsBest { get; set; }
+        public DateTime CreatedAt { get; set; }
+    }
+}

@@ -10,8 +10,6 @@ namespace QueryOptimizer.Models.Users
 
         public string Username { get; set; } = default!;
 
-        public string Password { get; set; } = default!;
-
         /*
          Possible future properties:
          */
