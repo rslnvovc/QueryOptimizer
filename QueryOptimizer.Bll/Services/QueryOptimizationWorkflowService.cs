@@ -97,7 +97,8 @@ namespace QueryOptimizer.Bll.Services
 
                 var candidates = _candidateGenerator.Generate(
                     request.Sql,
-                    findings);
+                    findings,
+                    request.Provider);
 
                 var candidateResults = await TestAndSaveCandidatesAsync(
                     executor,
@@ -324,7 +325,8 @@ namespace QueryOptimizer.Bll.Services
                 new KeyLookupRule(),
                 new BadCardinalityEstimatedRule(),
                 new ExpensiveNestedLoopRule(),
-                new HighLogicalReadsRule()
+                new HighLogicalReadsRule(),
+                new ImplicitJoinRule()
             };
         }
     }

@@ -303,7 +303,7 @@ namespace QueryOptimizer.Repositories
 
             using var executor = CreateExecutor();
             await executor.ExecuteNonQueryAsync(
-                "[Analyzing].[usp_OptimizationRuleWeight_Upsert]",
+                "[Analyzing].[OptimizationRuleWeight_Upsert]",
                 parameters,
                 CommandType.StoredProcedure);
         }

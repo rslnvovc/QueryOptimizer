@@ -20,10 +20,20 @@ namespace QueryOptimizer.Tests.Infrastructure
         {
             string connectionString = "Data Source=localhost\\SQLEXPRESS;Initial Catalog=master;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;";
 
-            string sql = @"SELECT ProductName, Total=SUM(Quantity)
-FROM Products P, [Order Details] OD, Orders O, Customers C
-WHERE C.CustomerID = O.CustomerID AND O.OrderID = OD.OrderID AND OD.ProductID = P.ProductID
-GROUP BY ProductName";
+            string sql = @"SELECT 
+    P.ProductName,
+    C.CompanyName,
+    SUM(OD.Quantity) AS TotalQuantity,
+    SUM(OD.Quantity * OD.UnitPrice) AS TotalAmount
+FROM Products P, [Order Details] OD, Orders O, Customers C, Categories Ctg
+WHERE OD.ProductID = P.ProductID
+  AND O.OrderID = OD.OrderID
+  AND C.CustomerID = O.CustomerID
+  AND Ctg.CategoryID = P.CategoryID
+  AND O.OrderDate >= '1997-01-01'
+GROUP BY 
+    P.ProductName,
+    C.CompanyName;";
 
             DatabaseExecutorFactory.InitDatabase(DatabaseTypes.SqlServer, connectionString);
 
@@ -112,7 +122,8 @@ inner join orders as ord on ordit.order_id = ord.order_id";
                 new KeyLookupRule(),
                 new BadCardinalityEstimatedRule(),
                 new ExpensiveNestedLoopRule(),
-                new HighLogicalReadsRule()
+                new HighLogicalReadsRule(),
+                new ImplicitJoinRule()
             };
         }
         #endregion

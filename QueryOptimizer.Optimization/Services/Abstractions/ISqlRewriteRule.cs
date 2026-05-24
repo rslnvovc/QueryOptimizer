@@ -7,11 +7,15 @@ using System.Text;
 
 namespace QueryOptimizer.Optimization.Services.Abstractions
 {
-    public interface IOptimizationCandidateGenerator
+    public interface ISqlRewriteRule
     {
-        IList<OptimizationCandidate> Generate(
+        string RuleCode { get; }
+
+        bool CanRewrite(QueryOptimizationFinding finding);
+
+        SqlRewriteCandidate? TryRewrite(
             string originalSql,
-            IList<QueryOptimizationFinding> findings,
+            QueryOptimizationFinding finding,
             DatabaseTypes provider
             );
     }

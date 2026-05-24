@@ -7,12 +7,11 @@ using System.Text;
 
 namespace QueryOptimizer.Optimization.Services.Abstractions
 {
-    public interface IOptimizationCandidateGenerator
+    public interface ISqlQueryImprovementService
     {
-        IList<OptimizationCandidate> Generate(
+        IList<SqlRewriteCandidate> BuildCandidates(
             string originalSql,
             IList<QueryOptimizationFinding> findings,
-            DatabaseTypes provider
-            );
+            DatabaseTypes provider);
     }
 }

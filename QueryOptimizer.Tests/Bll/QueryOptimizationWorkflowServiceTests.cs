@@ -5,6 +5,7 @@ using QueryOptimizer.Bll.Services;
 using QueryOptimizer.Bll.Services.Abstractions;
 using QueryOptimizer.DatabaseExecutor;
 using QueryOptimizer.Models.Application;
+using QueryOptimizer.Optimization.Rules.Rewrite;
 using QueryOptimizer.Optimization.Services;
 using QueryOptimizer.Optimization.Services.Abstractions;
 using QueryOptimizer.Providers.Oracle.Parsing;
@@ -29,16 +30,27 @@ namespace QueryOptimizer.Tests.Bll
             string applicationConnectionString = "Data Source=localhost\\SQLEXPRESS;Initial Catalog=QueryOptimizer;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;";
             string testingDBConnectionString = "Data Source=localhost\\SQLEXPRESS;Initial Catalog=master;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;";
 
-            string sql = @"SELECT ProductName, Total=SUM(Quantity)
-FROM Products P, [Order Details] OD, Orders O, Customers C
-WHERE C.CustomerID = O.CustomerID AND O.OrderID = OD.OrderID AND OD.ProductID = P.ProductID
-GROUP BY ProductName";
+            string sql = @"SELECT 
+    P.ProductName,
+    C.CompanyName,
+    SUM(OD.Quantity) AS TotalQuantity,
+    SUM(OD.Quantity * OD.UnitPrice) AS TotalAmount
+FROM Products P, [Order Details] OD, Orders O, Customers C, Categories Ctg
+WHERE OD.ProductID = P.ProductID
+  AND O.OrderID = OD.OrderID
+  AND C.CustomerID = O.CustomerID
+  AND Ctg.CategoryID = P.CategoryID
+  AND O.OrderDate >= '1997-01-01'
+GROUP BY 
+    P.ProductName,
+    C.CompanyName;";
 
             DatabaseExecutorFactory.InitDatabase(DatabaseTypes.SqlServer, applicationConnectionString);
 
             ITargetDatabaseExecutorFactory targetDatabaseExecutorFactory = new TargetDatabaseExecutorFactory();
             IExecutionPlanParserFactory executionPlanParserFactory = new ExecutionPlanParserFactory(GetParsers());
-            IOptimizationCandidateGenerator candidateGenerator = new OptimizationCandidateGenerator();
+            ISqlQueryImprovementService sqlQueryImprovementService = new SqlQueryImprovementService(GetRewriteRules());
+            IOptimizationCandidateGenerator candidateGenerator = new OptimizationCandidateGenerator(sqlQueryImprovementService);
             IAnalyzingRepository analyzingRepository = new AnalyzingRepository(applicationConnectionString);
             IAdaptiveLearningService adaptiveLearningService = new AdaptiveLearningService(analyzingRepository);
             IQueryOptimizationWorkflowService workflowService = new QueryOptimizationWorkflowService(
@@ -78,7 +90,8 @@ inner join orders as ord on ordit.order_id = ord.order_id";
 
             ITargetDatabaseExecutorFactory targetDatabaseExecutorFactory = new TargetDatabaseExecutorFactory();
             IExecutionPlanParserFactory executionPlanParserFactory = new ExecutionPlanParserFactory(GetParsers());
-            IOptimizationCandidateGenerator candidateGenerator = new OptimizationCandidateGenerator();
+            ISqlQueryImprovementService sqlQueryImprovementService = new SqlQueryImprovementService(GetRewriteRules());
+            IOptimizationCandidateGenerator candidateGenerator = new OptimizationCandidateGenerator(sqlQueryImprovementService);
             IAnalyzingRepository analyzingRepository = new AnalyzingRepository(applicationConnectionString);
             IAdaptiveLearningService adaptiveLearningService = new AdaptiveLearningService(analyzingRepository);
             IQueryOptimizationWorkflowService workflowService = new QueryOptimizationWorkflowService(
@@ -120,7 +133,8 @@ inner join orders as ord on ordit.order_id = ord.order_id";
 
             ITargetDatabaseExecutorFactory targetDatabaseExecutorFactory = new TargetDatabaseExecutorFactory();
             IExecutionPlanParserFactory executionPlanParserFactory = new ExecutionPlanParserFactory(GetParsers());
-            IOptimizationCandidateGenerator candidateGenerator = new OptimizationCandidateGenerator();
+            ISqlQueryImprovementService sqlQueryImprovementService = new SqlQueryImprovementService(GetRewriteRules());
+            IOptimizationCandidateGenerator candidateGenerator = new OptimizationCandidateGenerator(sqlQueryImprovementService);
             IAnalyzingRepository analyzingRepository = new AnalyzingRepository(applicationConnectionString);
             IAdaptiveLearningService adaptiveLearningService = new AdaptiveLearningService(analyzingRepository);
             IQueryOptimizationWorkflowService workflowService = new QueryOptimizationWorkflowService(
@@ -152,6 +166,15 @@ inner join orders as ord on ordit.order_id = ord.order_id";
                 new SqlServerExecutionPlanParser(),
                 new PostgresExecutionPlanParser(),
                 new OracleExecutionPlanParser()
+            };
+        }
+
+        private static List<ISqlRewriteRule> GetRewriteRules()
+        {
+            return new List<ISqlRewriteRule>()
+            { 
+                new YearFunctionRewriteRule(),
+                new ImplicitJoinRewriteRule()
             };
         }
     }
