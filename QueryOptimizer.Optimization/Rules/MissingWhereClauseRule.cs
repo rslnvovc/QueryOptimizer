@@ -35,7 +35,8 @@ namespace QueryOptimizer.Optimization.Rules
                 Title = "Missing WHERE clause in SELECT query",
                 Description = "The query is performing a full scan without a WHERE clause, which can lead to performance issues.",
                 Recommendation = "Consider adding a WHERE clause to filter the results and reduce the number of rows scanned.",
-                Severity = FindingSeverity.Medium
+                Severity = FindingSeverity.Medium,
+                Confidence = 0.75
             };
         }
     }

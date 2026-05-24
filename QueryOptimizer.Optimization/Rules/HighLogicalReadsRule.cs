@@ -31,6 +31,7 @@ namespace QueryOptimizer.Optimization.Rules
                     AffectedObject = node.ObjectName,
                     AffectedNodeType = node.NodeType,
                     Severity = FindingSeverity.High,
+                    Confidence = 0.85
                 };
             }
         }

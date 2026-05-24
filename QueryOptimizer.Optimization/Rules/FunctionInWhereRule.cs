@@ -58,7 +58,8 @@ namespace QueryOptimizer.Optimization.Rules
                 Title = $"Function '{detectedFunction}' used in WHERE clause",
                 Description = $"The function '{detectedFunction}' is used in the WHERE clause, which can prevent the use of indexes and lead to performance issues.",
                 Recommendation = $"Consider rewriting the query to avoid using the '{detectedFunction}' function in the WHERE clause. For example, if you're using '{detectedFunction}' on a column, try to compute the function's value in a derived column or use a different approach to filter the data.",
-                Severity = FindingSeverity.High
+                Severity = FindingSeverity.High,
+                Confidence = 0.85
             };
         }
     }

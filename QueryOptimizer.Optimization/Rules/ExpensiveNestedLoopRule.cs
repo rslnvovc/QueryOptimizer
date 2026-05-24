@@ -35,7 +35,8 @@ namespace QueryOptimizer.Optimization.Rules
                     Recommendation = "Check for indexes on JOIN columns. It is also worth checking the relevance of statistics and the selectivity of filtering conditions.",
                     AffectedObject = node.ObjectName,
                     AffectedNodeType = node.NormalizedNodeType,
-                    Severity = FindingSeverity.Medium
+                    Severity = FindingSeverity.Medium,
+                    Confidence = 0.75
                 };
             }
         }

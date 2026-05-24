@@ -42,7 +42,8 @@ namespace QueryOptimizer.Optimization.Rules
                     SuggestedIndexSql = column != null
                         ? OptimizationRuleHelper.BuildCreateIndexSql(plan.Provider, node.ObjectName, column)
                         : string.Empty,
-                    Severity = FindingSeverity.High
+                    Severity = FindingSeverity.High,
+                    Confidence = column == null ? 0.75 : 0.85
                 };
             }
         }

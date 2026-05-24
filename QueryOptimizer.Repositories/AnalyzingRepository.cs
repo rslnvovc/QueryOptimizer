@@ -3,6 +3,7 @@ using QueryOptimizer.DatabaseExecutor.Abstractions;
 using QueryOptimizer.Models.Analyzing;
 using QueryOptimizer.Models.Analyzing.DTO;
 using QueryOptimizer.Repositories.Abstractions;
+using QueryOptimizer.Shared.Common.Enums;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,6 +13,13 @@ namespace QueryOptimizer.Repositories
 {
     public class AnalyzingRepository : IAnalyzingRepository
     {
+        private readonly string _applicationConnectionString;
+
+        public AnalyzingRepository(string applicationConnectionString)
+        {
+            _applicationConnectionString = applicationConnectionString;
+        }
+
         public async Task CompleteQueryAnalysisRunAsync(int id, CancellationToken cancellationToken = default)
         {
             var parameters = new Dictionary<string, object>
@@ -19,7 +27,7 @@ namespace QueryOptimizer.Repositories
                 ["Id"] = id
             };
 
-            using var executor = DatabaseExecutorFactory.CreateDbExecutor();
+            using var executor = CreateExecutor();
             await executor.ExecuteNonQueryAsync(
                 "[Analyzing].[QueryAnalysisRun_Complete]",
                 parameters,
@@ -40,7 +48,7 @@ namespace QueryOptimizer.Repositories
                 ["IsBest"] = model.IsBest
             };
 
-            using var executor = DatabaseExecutorFactory.CreateDbExecutor();
+            using var executor = CreateExecutor();
             var result = await executor.ExecuteScalarAsync<int>(
                 "[Analyzing].[OptimizationCandidate_Create]",
                 parameters,
@@ -68,7 +76,7 @@ namespace QueryOptimizer.Repositories
                 ["LogicalReadsImprovementPercent"] = DbValue(model.LogicalReadsImprovementPercent)
             };
 
-            using var executor = DatabaseExecutorFactory.CreateDbExecutor();
+            using var executor = CreateExecutor();
             var result = await executor.ExecuteScalarAsync<int>(
                 "[Analyzing].[OptimizationExperience_Create]",
                 parameters,
@@ -100,7 +108,7 @@ namespace QueryOptimizer.Repositories
                 ["AdaptiveConfidence"] = model.AdaptiveConfidence
             };
 
-            using var executor = DatabaseExecutorFactory.CreateDbExecutor();
+            using var executor = CreateExecutor();
             var result = await executor.ExecuteScalarAsync<int>(
                 "[Analyzing].[OptimizationFinding_Create]",
                 parameters,
@@ -121,7 +129,7 @@ namespace QueryOptimizer.Repositories
                 ["NormalizedSqlHash"] = model.NormalizedSqlHash
             };
 
-            using var executor = DatabaseExecutorFactory.CreateDbExecutor();
+            using var executor = CreateExecutor();
             var result = await executor.ExecuteScalarAsync<int>(
                 "[Analyzing].[QueryAnalysisRun_Create]",
                 parameters,
@@ -155,7 +163,7 @@ namespace QueryOptimizer.Repositories
                 ["ExecutionPlanFormat"] = DbValue(model.ExecutionPlanFormat)
             };
 
-            using var executor = DatabaseExecutorFactory.CreateDbExecutor();
+            using var executor = CreateExecutor();
             var result = await executor.ExecuteScalarAsync<int>(
                 "[Analyzing].[QueryExecutionMetric_Create]",
                 parameters,
@@ -173,7 +181,7 @@ namespace QueryOptimizer.Repositories
                 ["ErrorMessage"] = errorMessage
             };
 
-            using var executor = DatabaseExecutorFactory.CreateDbExecutor();
+            using var executor = CreateExecutor();
             await executor.ExecuteNonQueryAsync(
                 "[Analyzing].[QueryAnalysisRun_Fail]",
                 parameters,
@@ -189,7 +197,7 @@ namespace QueryOptimizer.Repositories
                 ["RuleCode"] = ruleCode
             };
 
-            using var executor = DatabaseExecutorFactory.CreateDbExecutor();
+            using var executor = CreateExecutor();
             var result = await executor.ExecuteQueryAsync<OptimizationRuleWeights>(
                 "[Analyzing].[OptimizationRuleWeight_Get]",
                 parameters,
@@ -205,7 +213,7 @@ namespace QueryOptimizer.Repositories
                 ["Provider"] = provider
             };
 
-            using var executor = DatabaseExecutorFactory.CreateDbExecutor();
+            using var executor = CreateExecutor();
             var result = await executor.ExecuteQueryAsync<OptimizationRuleWeights>(
                 "[Analyzing].[OptimizationRuleWeights_GetByProvider]",
                 parameters,
@@ -228,7 +236,7 @@ namespace QueryOptimizer.Repositories
             var candidates = new List<OptimizationCandidates>();
             var experiences = new List<OptimizationExperiences>();
 
-            using var executor = DatabaseExecutorFactory.CreateDbExecutor();
+            using var executor = CreateExecutor();
 
             await executor.ExecuteComplexAsync(
                 "[Analyzing].[QueryAnalysisRun_GetFull]",
@@ -258,7 +266,7 @@ namespace QueryOptimizer.Repositories
                 ["UserId"] = userId
             };
 
-            using var executor = DatabaseExecutorFactory.CreateDbExecutor();
+            using var executor = CreateExecutor();
             var result = await executor.ExecuteQueryAsync<QueryAnalysisRuns>(
                 "[Analyzing].[QueryAnalysisRuns_GetByUser]",
                 parameters,
@@ -277,7 +285,7 @@ namespace QueryOptimizer.Repositories
                 ["IsBest"] = isBest
             };
 
-            using var executor = DatabaseExecutorFactory.CreateDbExecutor();
+            using var executor = CreateExecutor();
             await executor.ExecuteNonQueryAsync(
                 "[Analyzing].[OptimizationCandidate_UpdateTestResult]",
                 parameters,
@@ -293,7 +301,7 @@ namespace QueryOptimizer.Repositories
                 ["ImprovementPercent"] = improvementPercent
             };
 
-            using var executor = DatabaseExecutorFactory.CreateDbExecutor();
+            using var executor = CreateExecutor();
             await executor.ExecuteNonQueryAsync(
                 "[Analyzing].[usp_OptimizationRuleWeight_Upsert]",
                 parameters,
@@ -303,6 +311,13 @@ namespace QueryOptimizer.Repositories
         private static object DbValue<T>(T? value)
         {
             return value is null ? DBNull.Value : value;
+        }
+
+        private IDatabaseExecutor CreateExecutor()
+        {
+            return DatabaseExecutorFactory.CreateDbExecutor(
+                DatabaseTypes.SqlServer,
+                _applicationConnectionString);
         }
     }
 }

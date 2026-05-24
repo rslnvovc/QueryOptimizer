@@ -37,6 +37,7 @@ namespace QueryOptimizer.Optimization.Rules
                     SuggestedIndexSql = string.Empty,
                     AffectedObject = node.ObjectName,
                     AffectedNodeType = node.NodeType,
+                    Confidence = 0.8
                 };
             }
         }

@@ -29,7 +29,8 @@ namespace QueryOptimizer.Optimization.Rules
                 Title = "Leading Wildcard in LIKE",
                 Description = "Usually LIKE condition is not allow effectivly use indexes",
                 Recommendation = "Consider removing leading wildcard from LIKE condition or use full text search if applicable.",
-                Severity = FindingSeverity.Medium
+                Severity = FindingSeverity.Medium,
+                Confidence = 0.9
             };
         }
     }

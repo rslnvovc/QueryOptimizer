@@ -17,7 +17,7 @@ namespace QueryOptimizer.Tests.Repositories
 
             DatabaseExecutorFactory.InitDatabase(DatabaseTypes.SqlServer, connectionString);
 
-            IAnalyzingRepository analyzingRepository = new AnalyzingRepository();
+            IAnalyzingRepository analyzingRepository = new AnalyzingRepository(connectionString);
 
             var result = await analyzingRepository.GetOptimizationRuleWeightsByProviderAsync(Convert.ToInt32(DatabaseTypes.SqlServer), CancellationToken.None);
 

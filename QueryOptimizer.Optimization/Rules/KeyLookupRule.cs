@@ -30,7 +30,8 @@ namespace QueryOptimizer.Optimization.Rules
                     Recommendation = "Consider creating a covering index that includes the columns needed by the query to avoid the Key Lookup operation.",
                     AffectedObject = node.ObjectName,
                     AffectedNodeType = node.NodeType,
-                    Severity = FindingSeverity.High
+                    Severity = FindingSeverity.High,
+                    Confidence = 0.9
                 };
             }
         }

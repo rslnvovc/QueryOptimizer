@@ -52,6 +52,15 @@ namespace QueryOptimizer.DatabaseExecutor
             return new DatabaseExecutor(new DatabaseSource(ConnectionString, DatabaseType));
         }
 
+        public static IDatabaseExecutor CreateDbExecutor(
+            DatabaseTypes dbType,
+            string connectionString)
+        {
+            var databaseSource = new DatabaseSource(connectionString, dbType);
+
+            return new DatabaseExecutor(databaseSource);
+        }
+
         public static async Task<QueryPerformanceMetrics> AnalyzeAsync(
             string sql, 
             Dictionary<string, object> parameters, 

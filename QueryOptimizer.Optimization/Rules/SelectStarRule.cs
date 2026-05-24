@@ -24,7 +24,8 @@ namespace QueryOptimizer.Optimization.Rules
                 Title = "Usage of SELECT *",
                 Description = "Using SELECT * can lead to inefficient queries as it retrieves all columns, including those that may not be needed. This can increase I/O and memory usage.",
                 Recommendation = "Specify only the columns that are necessary for your query instead of using SELECT *.",
-                Severity = FindingSeverity.Medium
+                Severity = FindingSeverity.Medium,
+                Confidence = 0.95
             };
         }
     }

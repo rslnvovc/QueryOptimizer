@@ -15,9 +15,7 @@ CREATE PROCEDURE [Analyzing].[QueryExecutionMetric_Create]
     @PlanningTimeMs FLOAT = NULL,
 
     @ExecutionPlan NVARCHAR(MAX) = NULL,
-    @ExecutionPlanFormat INT = NULL,
-
-    @Id INT OUTPUT
+    @ExecutionPlanFormat INT = NULL
 AS
 BEGIN
 	SET NOCOUNT ON;
