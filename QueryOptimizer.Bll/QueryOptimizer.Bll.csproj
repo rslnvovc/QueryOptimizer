@@ -6,4 +6,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\QueryOptimizer.DbExecutor\QueryOptimizer.DatabaseExecutor.csproj" />
+    <ProjectReference Include="..\QueryOptimizer.Models\QueryOptimizer.Models.csproj" />
+    <ProjectReference Include="..\QueryOptimizer.Optimization\QueryOptimizer.Optimization.csproj" />
+    <ProjectReference Include="..\QueryOptimizer.Shared\QueryOptimizer.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

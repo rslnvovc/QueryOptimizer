@@ -13,6 +13,8 @@ namespace QueryOptimizer.Providers.Oracle.Parsing
 {
     public class OracleExecutionPlanParser : IExecutionPlanParser
     {
+        public DatabaseTypes Provider => DatabaseTypes.Oracle;
+
         public NormalizedExecutionPlan Parse(QueryPerformanceMetrics executionPlan)
         {
             var result = new NormalizedExecutionPlan()

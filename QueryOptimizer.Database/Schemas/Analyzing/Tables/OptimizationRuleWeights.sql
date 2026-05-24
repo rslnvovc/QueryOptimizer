@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [Analyzing].[OptimizationRuleWeights]
 (
-	[Id] INT NOT NULL,
+	[Id] INT IDENTITY NOT NULL,
 
 	[Provider] INT NOT NULL,
     RuleCode NVARCHAR(100) NOT NULL,

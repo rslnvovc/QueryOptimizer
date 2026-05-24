@@ -13,6 +13,8 @@ namespace QueryOptimizer.Providers.PostgreSQL.Parsing
 {
     public class PostgresExecutionPlanParser : IExecutionPlanParser
     {
+        public DatabaseTypes Provider => DatabaseTypes.PostgreSql;
+
         public NormalizedExecutionPlan Parse(QueryPerformanceMetrics executionPlan)
         {
             var result = new NormalizedExecutionPlan()

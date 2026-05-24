@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [Analyzing].[OptimizationExperiences]
 (
-	[Id] INT NOT NULL,
+	[Id] INT IDENTITY NOT NULL,
 	[Provider] INT NOT NULL,
     NormalizedSqlHash NVARCHAR(128) NOT NULL,
     RuleCode NVARCHAR(100) NOT NULL,

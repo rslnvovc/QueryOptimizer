@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\QueryOptimizer.Models\QueryOptimizer.Models.csproj" />
+    <ProjectReference Include="..\QueryOptimizer.Repositories\QueryOptimizer.Repositories.csproj" />
     <ProjectReference Include="..\QueryOptimizer.Shared\QueryOptimizer.Shared.csproj" />
   </ItemGroup>
 

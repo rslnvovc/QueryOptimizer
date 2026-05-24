@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [Analyzing].[QueryExecutionMetrics]
 (
-	Id INT NOT NULL,
+	Id INT IDENTITY NOT NULL,
     QueryAnalysisRunId INT NOT NULL,
     VariantType NVARCHAR(50) NOT NULL, -- Original / Candidate
     CandidateId INT NULL,

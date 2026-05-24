@@ -1,6 +1,6 @@
 CREATE TABLE [Analyzing].[QueryAnalysisRuns]
 (
-    Id INT NOT NULL,
+    Id INT IDENTITY NOT NULL,
     UserId INT NOT NULL,
     Provider INT NOT NULL,
     OriginalSql NVARCHAR(MAX) NOT NULL,

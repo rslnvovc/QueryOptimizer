@@ -15,6 +15,8 @@ namespace QueryOptimizer.Providers.SQLServer.Parsing
     {
         private static readonly XNamespace ShowPlanNamespace = "http://schemas.microsoft.com/sqlserver/2004/07/showplan";
 
+        public DatabaseTypes Provider => DatabaseTypes.SqlServer;
+
         public NormalizedExecutionPlan Parse(QueryPerformanceMetrics executionPlan)
         {
             var result = new NormalizedExecutionPlan()

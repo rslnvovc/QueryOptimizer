@@ -16,8 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\QueryOptimizer.Bll\QueryOptimizer.Bll.csproj" />
     <ProjectReference Include="..\QueryOptimizer.DbExecutor\QueryOptimizer.DatabaseExecutor.csproj" />
     <ProjectReference Include="..\QueryOptimizer.Optimization\QueryOptimizer.Optimization.csproj" />
+    <ProjectReference Include="..\QueryOptimizer.Repositories\QueryOptimizer.Repositories.csproj" />
   </ItemGroup>
 
   <ItemGroup>
