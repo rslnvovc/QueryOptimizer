@@ -91,5 +91,8 @@
     <Build Include="Schemas\Analyzing\Stored Procedures\QueryAnalysisRuns_GetByUser.sql" />
     <Build Include="Schemas\Analyzing\Stored Procedures\OptimizationRuleWeights_GetByProvider.sql" />
     <Build Include="Schemas\Analyzing\Stored Procedures\OptimizationRuleWeight_Get.sql" />
+    <Build Include="Schemas\User\Stored Procedures\User_Create.sql" />
+    <Build Include="Schemas\User\Stored Procedures\User_GetByLogin.sql" />
+    <Build Include="Schemas\User\Stored Procedures\User_GetByID.sql" />
   </ItemGroup>
 </Project>

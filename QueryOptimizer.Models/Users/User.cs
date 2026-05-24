@@ -6,7 +6,7 @@ namespace QueryOptimizer.Models.Users
 {
     public class User
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; } = 0;
 
         public string Username { get; set; } = default!;
 

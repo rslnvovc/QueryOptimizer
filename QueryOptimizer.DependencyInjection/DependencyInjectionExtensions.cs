@@ -17,6 +17,7 @@ using QueryOptimizer.Shared.Infrastructure.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.ServiceProcess;
 using System.Text;
 
 namespace QueryOptimizer.DependencyInjection
@@ -34,10 +35,14 @@ namespace QueryOptimizer.DependencyInjection
             services.AddScoped<IAnalyzingRepository>(_ =>
                 new AnalyzingRepository(applicationConnectionString));
 
+            services.AddScoped<IUserRepository>(_ =>
+                new UserRepository(applicationConnectionString));
+
             services.AddScoped<ITargetDatabaseExecutorFactory, TargetDatabaseExecutorFactory>();
             services.AddScoped<IExecutionPlanParserFactory, ExecutionPlanParserFactory>();
 
             services.AddScoped<IQueryOptimizationWorkflowService, QueryOptimizationWorkflowService>();
+            services.AddScoped<IUserService, UserService>();
 
             services.AddScoped<IAdaptiveLearningService, AdaptiveLearningService>();
 
