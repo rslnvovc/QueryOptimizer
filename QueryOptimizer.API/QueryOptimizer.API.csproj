@@ -16,4 +16,8 @@
     <ProjectReference Include="..\QueryOptimizer.Shared\QueryOptimizer.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="app\" />
+  </ItemGroup>
+
 </Project>
