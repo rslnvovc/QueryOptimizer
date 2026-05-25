@@ -1,0 +1,544 @@
+<div class="min-h-screen bg-slate-100">
+      <header class="bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div>
+            <h1 class="text-xl font-bold text-slate-900">Query Optimizer</h1>
+            <p class="text-sm text-slate-500">SQL analysis and adaptive recommendations</p>
+          </div>
+
+          <div class="flex items-center gap-4">
+            <span class="text-sm text-slate-600">
+              {{ userName }}
+            </span>
+
+            <button
+              (click)="logout()"
+              class="rounded-lg border border-slate-300 px-4 py-2 text-sm hover:bg-slate-50">
+              Logout
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main class="max-w-7xl mx-auto px-6 py-8 grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <section class="bg-white rounded-2xl shadow p-6">
+          <h2 class="text-lg font-semibold text-slate-900 mb-4">
+            Analyze SQL query
+          </h2>
+
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1">
+                Database provider
+              </label>
+
+              <select
+                [(ngModel)]="provider"
+                class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500">
+                <option [ngValue]="DatabaseTypes.SqlServer">SQL Server</option>
+                <option [ngValue]="DatabaseTypes.PostgreSql">PostgreSQL</option>
+                <option [ngValue]="DatabaseTypes.Oracle">Oracle</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1">
+                Target database connection string
+              </label>
+
+              <input
+                [(ngModel)]="connectionString"
+                class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Data Source=localhost\\SQLEXPRESS;Initial Catalog=Northwind;..."
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1">
+                SQL query
+              </label>
+
+              <textarea
+                [(ngModel)]="sql"
+                rows="13"
+                class="w-full rounded-xl border border-slate-300 px-4 py-3 font-mono text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="SELECT * FROM Orders">
+              </textarea>
+            </div>
+
+            <button
+              (click)="analyze()"
+              [disabled]="loading"
+              class="w-full rounded-xl bg-blue-600 text-white py-3 font-medium hover:bg-blue-700 disabled:opacity-50">
+              {{ loading ? 'Analyzing...' : 'Analyze query' }}
+            </button>
+
+            <p *ngIf="error" class="text-sm text-red-600">
+              {{ error }}
+            </p>
+          </div>
+        </section>
+
+        <section class="space-y-6">
+  <div *ngIf="!result" class="bg-white rounded-2xl shadow p-6 text-slate-500">
+    Results will appear here after analysis.
+  </div>
+
+  <ng-container *ngIf="result as r">
+    <!-- Analysis summary -->
+    <div class="bg-white rounded-2xl shadow p-6">
+      <h2 class="text-lg font-semibold text-slate-900 mb-4">
+        Analysis summary
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div class="rounded-xl bg-slate-50 p-4">
+          <p class="text-xs text-slate-500">Analysis run ID</p>
+          <p class="text-lg font-bold text-slate-900">
+            {{ r.analysisRunId }}
+          </p>
+        </div>
+
+        <div class="rounded-xl bg-slate-50 p-4">
+          <p class="text-xs text-slate-500">Findings count</p>
+          <p class="text-lg font-bold text-slate-900">
+            {{ r.findings?.length ?? 0 }}
+          </p>
+        </div>
+
+        <div class="rounded-xl bg-slate-50 p-4">
+          <p class="text-xs text-slate-500">Candidates count</p>
+          <p class="text-lg font-bold text-slate-900">
+            {{ r.candidateResults?.length ?? 0 }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Original metrics -->
+    <div class="bg-white rounded-2xl shadow p-6">
+      <h2 class="text-lg font-semibold text-slate-900 mb-4">
+        Original query metrics
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+        <div class="rounded-xl bg-slate-50 p-4">
+          <p class="text-xs text-slate-500">Metric ID</p>
+          <p class="text-sm font-semibold text-slate-900 break-all">
+            {{ r.originalMetrics?.id ?? '-' }}
+          </p>
+        </div>
+
+        <div class="rounded-xl bg-slate-50 p-4">
+          <p class="text-xs text-slate-500">Provider</p>
+          <p class="text-lg font-bold text-slate-900">
+            {{ r.originalMetrics?.provider ?? '-' }}
+          </p>
+        </div>
+
+        <div class="rounded-xl bg-slate-50 p-4">
+          <p class="text-xs text-slate-500">Client elapsed</p>
+          <p class="text-lg font-bold text-slate-900">
+            {{ r.originalMetrics?.clientElapsedMs ?? '-' }} ms
+          </p>
+        </div>
+
+        <div class="rounded-xl bg-slate-50 p-4">
+          <p class="text-xs text-slate-500">Database elapsed</p>
+          <p class="text-lg font-bold text-slate-900">
+            {{ r.originalMetrics?.databaseElapsedMs ?? '-' }} ms
+          </p>
+        </div>
+
+        <div class="rounded-xl bg-slate-50 p-4">
+          <p class="text-xs text-slate-500">CPU time</p>
+          <p class="text-lg font-bold text-slate-900">
+            {{ r.originalMetrics?.cpuTimeMs ?? '-' }} ms
+          </p>
+        </div>
+
+        <div class="rounded-xl bg-slate-50 p-4">
+          <p class="text-xs text-slate-500">Logical reads</p>
+          <p class="text-lg font-bold text-slate-900">
+            {{ r.originalMetrics?.logicalReads ?? '-' }}
+          </p>
+        </div>
+
+        <div class="rounded-xl bg-slate-50 p-4">
+          <p class="text-xs text-slate-500">Physical reads</p>
+          <p class="text-lg font-bold text-slate-900">
+            {{ r.originalMetrics?.physicalReads ?? '-' }}
+          </p>
+        </div>
+
+        <div class="rounded-xl bg-slate-50 p-4">
+          <p class="text-xs text-slate-500">Rows returned</p>
+          <p class="text-lg font-bold text-slate-900">
+            {{ r.originalMetrics?.rowsReturned ?? '-' }}
+          </p>
+        </div>
+
+        <div class="rounded-xl bg-slate-50 p-4">
+          <p class="text-xs text-slate-500">Rows affected</p>
+          <p class="text-lg font-bold text-slate-900">
+            {{ r.originalMetrics?.rowsAffected ?? '-' }}
+          </p>
+        </div>
+
+        <div class="rounded-xl bg-slate-50 p-4">
+          <p class="text-xs text-slate-500">Estimated cost</p>
+          <p class="text-lg font-bold text-slate-900">
+            {{ r.originalMetrics?.estimatedCost ?? '-' }}
+          </p>
+        </div>
+
+        <div class="rounded-xl bg-slate-50 p-4">
+          <p class="text-xs text-slate-500">Planning time</p>
+          <p class="text-lg font-bold text-slate-900">
+            {{ r.originalMetrics?.planningTimeMs ?? '-' }} ms
+          </p>
+        </div>
+
+        <div class="rounded-xl bg-slate-50 p-4">
+          <p class="text-xs text-slate-500">Execution plan format</p>
+          <p class="text-lg font-bold text-slate-900">
+            {{ r.originalMetrics?.executionPlanFormat ?? '-' }}
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <p class="text-sm font-medium text-slate-700 mb-1">
+          Original SQL
+        </p>
+        <pre class="rounded-xl bg-slate-900 text-slate-100 p-4 overflow-auto text-xs">{{ r.originalMetrics?.originalSql ?? '-' }}</pre>
+      </div>
+    </div>
+
+    <!-- Normalized plan -->
+    <div class="bg-white rounded-2xl shadow p-6">
+      <h2 class="text-lg font-semibold text-slate-900 mb-4">
+        Normalized execution plan
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 mb-4">
+        <div class="rounded-xl bg-slate-50 p-4">
+          <p class="text-xs text-slate-500">Provider</p>
+          <p class="text-lg font-bold text-slate-900">
+            {{ r.normalizedPlan?.provider ?? '-' }}
+          </p>
+        </div>
+
+        <div class="rounded-xl bg-slate-50 p-4">
+          <p class="text-xs text-slate-500">Total cost</p>
+          <p class="text-lg font-bold text-slate-900">
+            {{ r.normalizedPlan?.totalCost ?? '-' }}
+          </p>
+        </div>
+
+        <div class="rounded-xl bg-slate-50 p-4">
+          <p class="text-xs text-slate-500">Total logical reads</p>
+          <p class="text-lg font-bold text-slate-900">
+            {{ r.normalizedPlan?.totalLogicalReads ?? '-' }}
+          </p>
+        </div>
+
+        <div class="rounded-xl bg-slate-50 p-4">
+          <p class="text-xs text-slate-500">Plan nodes</p>
+          <p class="text-lg font-bold text-slate-900">
+            {{ r.normalizedPlan?.nodes?.length ?? 0 }}
+          </p>
+        </div>
+      </div>
+
+      <div *ngIf="r.normalizedPlan?.nodes?.length" class="space-y-3">
+        <h3 class="font-semibold text-slate-900">
+          Plan nodes
+        </h3>
+
+        <div
+          *ngFor="let node of r.normalizedPlan?.nodes || []"
+          class="rounded-xl border border-slate-200 p-4">
+
+          <div class="flex items-center justify-between gap-3 mb-3">
+            <div>
+              <p class="font-semibold text-slate-900">
+                {{ node.normalizedNodeType ?? node.nodeType ?? 'Unknown node' }}
+              </p>
+              <p class="text-sm text-slate-500">
+                Raw node type: {{ node.nodeType ?? '-' }}
+              </p>
+            </div>
+
+            <span class="text-xs rounded-full bg-slate-100 px-3 py-1 text-slate-600">
+              {{ node.joinType ?? 'operation' }}
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+            <div>
+              <span class="text-slate-500">Object:</span>
+              <span class="font-medium text-slate-900">{{ node.objectName ?? '-' }}</span>
+            </div>
+
+            <div>
+              <span class="text-slate-500">Index:</span>
+              <span class="font-medium text-slate-900">{{ node.indexName ?? '-' }}</span>
+            </div>
+
+            <div>
+              <span class="text-slate-500">Estimated rows:</span>
+              <span class="font-medium text-slate-900">{{ node.estimatedRows ?? '-' }}</span>
+            </div>
+
+            <div>
+              <span class="text-slate-500">Actual rows:</span>
+              <span class="font-medium text-slate-900">{{ node.actualRows ?? '-' }}</span>
+            </div>
+
+            <div>
+              <span class="text-slate-500">Estimated cost:</span>
+              <span class="font-medium text-slate-900">{{ node.estimatedCost ?? '-' }}</span>
+            </div>
+
+            <div>
+              <span class="text-slate-500">Actual time:</span>
+              <span class="font-medium text-slate-900">{{ node.actualTimeMs ?? '-' }} ms</span>
+            </div>
+
+            <div>
+              <span class="text-slate-500">Logical reads:</span>
+              <span class="font-medium text-slate-900">{{ node.logicalReads ?? '-' }}</span>
+            </div>
+
+            <div>
+              <span class="text-slate-500">Physical reads:</span>
+              <span class="font-medium text-slate-900">{{ node.physicalReads ?? '-' }}</span>
+            </div>
+          </div>
+
+          <div *ngIf="node.predicate" class="mt-3">
+            <p class="text-xs text-slate-500 mb-1">Predicate</p>
+            <pre class="rounded-lg bg-slate-100 p-3 text-xs overflow-auto">{{ node.predicate }}</pre>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="r.normalizedPlan?.rawPlan" class="mt-4">
+        <p class="text-sm font-medium text-slate-700 mb-1">
+          Raw normalized plan
+        </p>
+        <pre class="max-h-[400px] rounded-xl bg-slate-900 text-slate-100 p-4 overflow-auto text-xs">{{ r.normalizedPlan?.rawPlan }}</pre>
+      </div>
+    </div>
+
+    <!-- Findings -->
+    <div class="bg-white rounded-2xl shadow p-6">
+      <h2 class="text-lg font-semibold text-slate-900 mb-4">
+        Recommendations / Findings
+      </h2>
+
+      <div *ngIf="!r.findings || r.findings.length === 0" class="text-slate-500">
+        No findings detected.
+      </div>
+
+      <div class="space-y-4">
+        <div
+          *ngFor="let finding of r.findings"
+          class="rounded-xl border border-slate-200 p-4">
+
+          <div class="flex items-center justify-between gap-3">
+            <h3 class="font-semibold text-slate-900">
+              {{ finding.title }}
+            </h3>
+
+            <span class="text-xs rounded-full bg-slate-100 px-3 py-1 text-slate-600">
+              {{ finding.ruleCode }}
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3 text-sm">
+            <div>
+              <span class="text-slate-500">Severity:</span>
+              <span class="font-medium text-slate-900">{{ finding.severity }}</span>
+            </div>
+
+            <div>
+              <span class="text-slate-500">Confidence:</span>
+              <span class="font-medium text-slate-900">
+                {{ finding.confidence ?? '-' }}
+              </span>
+            </div>
+
+            <div>
+              <span class="text-slate-500">Adaptive confidence:</span>
+              <span class="font-medium text-slate-900">
+                {{ finding.adaptiveConfidence ?? '-' }}
+              </span>
+            </div>
+
+            <div>
+              <span class="text-slate-500">Affected object:</span>
+              <span class="font-medium text-slate-900">
+                {{ finding.affectedObject ?? '-' }}
+              </span>
+            </div>
+
+            <div>
+              <span class="text-slate-500">Affected node type:</span>
+              <span class="font-medium text-slate-900">
+                {{ finding.affectedNodeType ?? '-' }}
+              </span>
+            </div>
+          </div>
+
+          <p class="text-sm text-slate-600 mt-3">
+            {{ finding.description }}
+          </p>
+
+          <p class="text-sm text-blue-700 mt-2">
+            {{ finding.recommendation }}
+          </p>
+
+          <div *ngIf="finding.suggestedSql" class="mt-4">
+            <p class="text-sm font-medium text-slate-700 mb-1">
+              Suggested SQL
+            </p>
+            <pre class="rounded-xl bg-slate-900 text-slate-100 p-4 overflow-auto text-xs">{{ finding.suggestedSql }}</pre>
+          </div>
+
+          <div *ngIf="finding.suggestedIndexSql" class="mt-4">
+            <p class="text-sm font-medium text-slate-700 mb-1">
+              Suggested index SQL
+            </p>
+            <pre class="rounded-xl bg-slate-900 text-slate-100 p-4 overflow-auto text-xs">{{ finding.suggestedIndexSql }}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Best candidate -->
+    <div *ngIf="r.bestCandidate" class="bg-white rounded-2xl shadow p-6 border border-green-300">
+      <h2 class="text-lg font-semibold text-slate-900 mb-4">
+        Best candidate
+      </h2>
+
+      <p class="text-sm text-slate-600">
+        Rule:
+        <strong>{{ r.bestCandidate.ruleCode }}</strong>
+      </p>
+
+      <p class="text-sm text-slate-600 mt-1">
+        Improvement:
+        <strong>
+          {{ r.bestCandidate.improvementPercent != null ? (r.bestCandidate.improvementPercent | number:'1.1-2') + '%' : '-' }}
+        </strong>
+      </p>
+
+      <pre class="rounded-xl bg-slate-900 text-slate-100 p-4 overflow-auto text-xs mt-3">{{ r.bestCandidate.candidateSql }}</pre>
+    </div>
+
+    <!-- Candidate results -->
+    <div class="bg-white rounded-2xl shadow p-6">
+      <h2 class="text-lg font-semibold text-slate-900 mb-4">
+        Tested candidates
+      </h2>
+
+      <div *ngIf="!r.candidateResults || r.candidateResults.length === 0" class="text-slate-500">
+        No candidate SQL variants were generated or tested.
+      </div>
+
+      <div class="space-y-4">
+        <div
+          *ngFor="let candidate of r.candidateResults"
+          class="rounded-xl border p-4"
+          [class.border-green-400]="candidate.isBest"
+          [class.border-slate-200]="!candidate.isBest">
+
+          <div class="flex items-center justify-between">
+            <h3 class="font-semibold text-slate-900">
+              {{ candidate.ruleCode }}
+            </h3>
+
+            <span
+              *ngIf="candidate.isBest"
+              class="text-xs bg-green-100 text-green-700 rounded-full px-3 py-1">
+              Best
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3 text-sm">
+            <div>
+              <span class="text-slate-500">Candidate ID:</span>
+              <span class="font-medium text-slate-900">{{ candidate.candidateId ?? '-' }}</span>
+            </div>
+
+            <div>
+              <span class="text-slate-500">Was tested:</span>
+              <span class="font-medium text-slate-900">{{ candidate.wasTested }}</span>
+            </div>
+
+            <div>
+              <span class="text-slate-500">Improvement:</span>
+              <span class="font-medium text-slate-900">
+                {{ candidate.improvementPercent != null ? (candidate.improvementPercent | number:'1.1-2') + '%' : '-' }}
+              </span>
+            </div>
+
+            <div>
+              <span class="text-slate-500">Description:</span>
+              <span class="font-medium text-slate-900">{{ candidate.description ?? '-' }}</span>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <p class="text-sm font-medium text-slate-700 mb-1">
+              Candidate SQL
+            </p>
+            <pre class="rounded-xl bg-slate-900 text-slate-100 p-4 overflow-auto text-xs">{{ candidate.candidateSql }}</pre>
+          </div>
+
+          <div *ngIf="candidate.metrics" class="mt-4">
+            <p class="text-sm font-medium text-slate-700 mb-2">
+              Candidate metrics
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div class="rounded-xl bg-slate-50 p-4">
+                <p class="text-xs text-slate-500">Client elapsed</p>
+                <p class="font-bold text-slate-900">
+                  {{ candidate.metrics.clientElapsedMs ?? '-' }} ms
+                </p>
+              </div>
+
+              <div class="rounded-xl bg-slate-50 p-4">
+                <p class="text-xs text-slate-500">Logical reads</p>
+                <p class="font-bold text-slate-900">
+                  {{ candidate.metrics.logicalReads ?? '-' }}
+                </p>
+              </div>
+
+              <div class="rounded-xl bg-slate-50 p-4">
+                <p class="text-xs text-slate-500">Rows returned</p>
+                <p class="font-bold text-slate-900">
+                  {{ candidate.metrics.rowsReturned ?? '-' }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Raw execution plan -->
+    <div *ngIf="r.originalMetrics?.executionPlan" class="bg-white rounded-2xl shadow p-6">
+      <h2 class="text-lg font-semibold text-slate-900 mb-4">
+        Raw execution plan
+      </h2>
+
+      <pre class="max-h-[500px] rounded-xl bg-slate-900 text-slate-100 p-4 overflow-auto text-xs">{{ r.originalMetrics.executionPlan }}</pre>
+    </div>
+  </ng-container>
+</section>
+      </main>
+    </div>

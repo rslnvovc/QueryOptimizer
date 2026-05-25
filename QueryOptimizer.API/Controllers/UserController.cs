@@ -17,22 +17,22 @@ namespace QueryOptimizer.API.Controllers
             _userService = userService;
         }
 
-        [HttpPost]
+        [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody]User user, CancellationToken cancellationToken)
         {
             return Ok(await _userService.RegisterAsync(user,cancellationToken));
+        }
+
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody]User user, CancellationToken cancellationToken)
+        {
+            return Ok(await _userService.GetByUsername(user.Username, cancellationToken));
         }
 
         [HttpGet("{id}/id")]
         public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
         {
             return Ok(await _userService.GetByIdAsync(id, cancellationToken));
-        }
-
-        [HttpGet("{userName}/userName")]
-        public async Task<IActionResult> GetByUserName(string userName, CancellationToken cancellationToken)
-        {
-            return Ok(await _userService.GetByUsername(userName, cancellationToken));
         }
     }
 }

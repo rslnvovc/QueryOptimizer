@@ -16,10 +16,11 @@ namespace QueryOptimizer.API.Controllers
             this._queryOptimizationWorkflowService = queryOptimizationWorkflowService;
         }
 
-        [HttpPost]
+        [HttpPost("Analyze")]
         public async Task<IActionResult> Analyze(QueryOptimizationRequest request, CancellationToken cancellationToken)
         {
-            return Ok(await _queryOptimizationWorkflowService.AnalyzeAsync(request, cancellationToken));
+            var result = await _queryOptimizationWorkflowService.AnalyzeAsync(request, cancellationToken);
+            return Ok(result);
         }
     }
 }

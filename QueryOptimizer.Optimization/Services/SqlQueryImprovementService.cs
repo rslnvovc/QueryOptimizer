@@ -1,4 +1,5 @@
 ﻿using QueryOptimizer.Models.Application;
+using QueryOptimizer.Optimization.Rules.Rewrite;
 using QueryOptimizer.Optimization.Services.Abstractions;
 using QueryOptimizer.Shared.Common.Enums;
 using QueryOptimizer.Shared.Common.Models.Optimization;
@@ -14,7 +15,7 @@ namespace QueryOptimizer.Optimization.Services
 
         public SqlQueryImprovementService(IEnumerable<ISqlRewriteRule> rewriteRules)
         {
-            _rewriteRules = rewriteRules;
+            _rewriteRules = GetRewriteRules();
         }
 
         public IList<SqlRewriteCandidate> BuildCandidates(string originalSql, IList<QueryOptimizationFinding> findings, DatabaseTypes provider)
@@ -58,6 +59,15 @@ namespace QueryOptimizer.Optimization.Services
                 sql.Split(
                     new[] { ' ', '\r', '\n', '\t' },
                     StringSplitOptions.RemoveEmptyEntries));
+        }
+
+        private static List<ISqlRewriteRule> GetRewriteRules()
+        {
+            return new List<ISqlRewriteRule>()
+            {
+                new YearFunctionRewriteRule(),
+                new ImplicitJoinRewriteRule()
+            };
         }
     }
 }

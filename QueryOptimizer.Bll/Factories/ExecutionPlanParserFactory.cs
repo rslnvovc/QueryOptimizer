@@ -1,4 +1,7 @@
 ﻿using QueryOptimizer.Bll.Factories.Abstractions;
+using QueryOptimizer.Providers.Oracle.Parsing;
+using QueryOptimizer.Providers.PostgreSQL.Parsing;
+using QueryOptimizer.Providers.SQLServer.Parsing;
 using QueryOptimizer.Shared.Common.Enums;
 using QueryOptimizer.Shared.Common.Exceptions.Database;
 using QueryOptimizer.Shared.Infrastructure.Abstractions;
@@ -14,7 +17,7 @@ namespace QueryOptimizer.Bll.Factories
 
         public ExecutionPlanParserFactory(IEnumerable<IExecutionPlanParser> parsers)
         { 
-            _parsers = parsers;
+            _parsers = GetParsers();
         }
 
         public IExecutionPlanParser GetParser(DatabaseTypes provider)
@@ -24,6 +27,16 @@ namespace QueryOptimizer.Bll.Factories
             if (parser is null) throw new NotSupportedDBTypeException();
 
             return parser;
+        }
+
+        private static List<IExecutionPlanParser> GetParsers()
+        {
+            return new List<IExecutionPlanParser>()
+            {
+                new SqlServerExecutionPlanParser(),
+                new PostgresExecutionPlanParser(),
+                new OracleExecutionPlanParser()
+            };
         }
     }
 }
