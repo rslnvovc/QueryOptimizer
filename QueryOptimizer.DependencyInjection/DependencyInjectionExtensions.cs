@@ -42,6 +42,7 @@ namespace QueryOptimizer.DependencyInjection
             services.AddScoped<IExecutionPlanParserFactory, ExecutionPlanParserFactory>();
 
             services.AddScoped<IQueryOptimizationWorkflowService, QueryOptimizationWorkflowService>();
+            services.AddScoped<IHistoryService, HistoryService>();
             services.AddScoped<IUserService, UserService>();
 
             services.AddScoped<IAdaptiveLearningService, AdaptiveLearningService>();

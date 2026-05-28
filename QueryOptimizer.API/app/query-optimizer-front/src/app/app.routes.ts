@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { Login } from './pages/login/login';
 import { Register } from './pages/register/register';
 import { Analyzer } from './pages/analyzer/analyzer';
+import { History } from './pages/history/history';
 import { authGuard } from './core/auth.guard';
 
 export const routes: Routes = [
@@ -9,5 +10,6 @@ export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'register', component: Register },
   { path: 'analyze', component: Analyzer, canActivate: [authGuard] },
+  { path: 'history', component: History, canActivate: [authGuard] },
   { path: '**', redirectTo: 'analyze' }
 ];

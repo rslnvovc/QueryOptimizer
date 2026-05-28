@@ -97,4 +97,8 @@ GROUP BY ProductName`;
     this.authService.logout();
     this.router.navigate(['/login']);
   }
+
+  goToHistory(): void {
+    this.router.navigate(['/history']);
+  }
 }

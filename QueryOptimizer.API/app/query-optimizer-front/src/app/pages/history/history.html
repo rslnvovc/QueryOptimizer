@@ -1,0 +1,119 @@
+<div class="min-h-screen bg-slate-100">
+  <header class="bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div>
+        <h1 class="text-xl font-bold text-slate-900">Query Optimizer</h1>
+        <p class="text-sm text-slate-500">User analysis history</p>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button
+          type="button"
+          (click)="goToAnalyzer()"
+          class="rounded-lg border border-slate-300 px-4 py-2 text-sm hover:bg-slate-50">
+          Analyze
+        </button>
+
+        <button
+          type="button"
+          (click)="logout()"
+          class="rounded-lg border border-slate-300 px-4 py-2 text-sm hover:bg-slate-50">
+          Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 py-8">
+    <section class="bg-white rounded-2xl shadow p-6">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h2 class="text-lg font-semibold text-slate-900">
+            My query analysis history
+          </h2>
+          <p class="text-sm text-slate-500">
+            Previous SQL optimization runs for current user.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          (click)="loadHistory()"
+          class="rounded-lg bg-blue-600 text-white px-4 py-2 text-sm hover:bg-blue-700">
+          Refresh
+        </button>
+      </div>
+
+      <div *ngIf="loading" class="text-slate-500">
+        Loading history...
+      </div>
+
+      <div *ngIf="error" class="text-red-600 text-sm">
+        {{ error }}
+      </div>
+
+      <div *ngIf="!loading && history.length === 0" class="text-slate-500">
+        No analysis history found.
+      </div>
+
+      <div *ngIf="history.length > 0" class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-slate-200 text-left text-slate-500">
+              <th class="py-3 px-3">ID</th>
+              <th class="py-3 px-3">Provider</th>
+              <th class="py-3 px-3">Status</th>
+              <th class="py-3 px-3">Started</th>
+              <th class="py-3 px-3">Finished</th>
+              <th class="py-3 px-3">SQL</th>
+              <th class="py-3 px-3"></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr
+              *ngFor="let run of history"
+              class="border-b border-slate-100 hover:bg-slate-50">
+              <td class="py-3 px-3 font-medium text-slate-900">
+                {{ run.id }}
+              </td>
+
+              <td class="py-3 px-3">
+                {{ getProviderName(run.provider) }}
+              </td>
+
+              <td class="py-3 px-3">
+                <span
+                  class="rounded-full px-3 py-1 text-xs"
+                  [class]="getStatusClass(run.status)">
+                  {{ run.status }}
+                </span>
+              </td>
+
+              <td class="py-3 px-3">
+                {{ run.startedAt | date:'short' }}
+              </td>
+
+              <td class="py-3 px-3">
+                {{ run.finishedAt ? (run.finishedAt | date:'short') : '-' }}
+              </td>
+
+              <td class="py-3 px-3 max-w-md">
+                <pre class="whitespace-pre-wrap text-xs text-slate-700 line-clamp-3">{{ run.originalSql }}</pre>
+              </td>
+
+              <td class="py-3 px-3 text-right">
+                <button
+                  type="button"
+                  (click)="openDetails(run)"
+                  class="rounded-lg border border-slate-300 px-3 py-2 text-xs hover:bg-white">
+                  Details
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
