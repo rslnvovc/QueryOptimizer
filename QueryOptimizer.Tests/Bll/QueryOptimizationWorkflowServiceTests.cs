@@ -64,8 +64,8 @@ GROUP BY
             var request = new QueryOptimizationRequest()
             {
                 UserId = 1, /*Admin*/
-                Provider = DatabaseTypes.SqlServer,
-                ConnectionString = testingDBConnectionString,
+                //Provider = DatabaseTypes.SqlServer,
+                //ConnectionString = testingDBConnectionString,
                 Sql = sql
             };
 
@@ -105,8 +105,8 @@ inner join orders as ord on ordit.order_id = ord.order_id";
             var request = new QueryOptimizationRequest()
             {
                 UserId = 1, /*Admin*/
-                Provider = DatabaseTypes.PostgreSql,
-                ConnectionString = testingDBConnectionString,
+                //Provider = DatabaseTypes.PostgreSql,
+                //ConnectionString = testingDBConnectionString,
                 Sql = sql
             };
 
@@ -148,8 +148,8 @@ inner join orders as ord on ordit.order_id = ord.order_id";
             var request = new QueryOptimizationRequest()
             {
                 UserId = 1, /*Admin*/
-                Provider = DatabaseTypes.Oracle,
-                ConnectionString = testingDBConnectionString,
+                //Provider = DatabaseTypes.Oracle,
+                //ConnectionString = testingDBConnectionString,
                 Sql = sql
             };
 
