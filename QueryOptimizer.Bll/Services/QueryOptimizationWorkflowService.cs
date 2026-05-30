@@ -6,7 +6,12 @@ using QueryOptimizer.Models.Application;
 using QueryOptimizer.Optimization.Rules;
 using QueryOptimizer.Optimization.Services;
 using QueryOptimizer.Optimization.Services.Abstractions;
+using QueryOptimizer.Providers.Oracle.Connectivity;
+using QueryOptimizer.Providers.PostgreSQL.Connectivity;
+using QueryOptimizer.Providers.SQLServer.Connectivity;
 using QueryOptimizer.Repositories.Abstractions;
+using QueryOptimizer.Shared.Common.Enums;
+using QueryOptimizer.Shared.Common.Exceptions.Database;
 using QueryOptimizer.Shared.Common.Helpers;
 using QueryOptimizer.Shared.Common.Models.Metrics;
 using QueryOptimizer.Shared.Common.Models.Optimization;
@@ -44,13 +49,15 @@ namespace QueryOptimizer.Bll.Services
 
         public async Task<QueryOptimizationResult> AnalyzeAsync(QueryOptimizationRequest request, CancellationToken cancellationToken = default)
         {
+            string connectionString = CreateConnectionString(request.ConnectionStringModel);
+
             var normalizedSqlHash = QueryHashHelper.ComputeHash(request.Sql);
 
             var analysisRunId = await _analyzingRepository.CreateQueryAnalysisRunAsync(
                 new CreateQueryAnalysisRunModel
                 {
                     UserId = request.UserId,
-                    Provider = (int)request.Provider,
+                    Provider = (int)request.ConnectionStringModel.Provider,
                     OriginalSql = request.Sql,
                     NormalizedSqlHash = normalizedSqlHash
                 },
@@ -59,8 +66,8 @@ namespace QueryOptimizer.Bll.Services
             try
             {
                 var executor = _targetDatabaseExecutorFactory.Create(
-                    request.Provider,
-                    request.ConnectionString);
+                    request.ConnectionStringModel.Provider,
+                    connectionString);
 
                 var originalMetrics = await executor.AnalyzeAsync(
                     request.Sql,
@@ -74,7 +81,7 @@ namespace QueryOptimizer.Bll.Services
                     originalMetrics,
                     cancellationToken);
 
-                var parser = _executionPlanParserFactory.GetParser(request.Provider);
+                var parser = _executionPlanParserFactory.GetParser(request.ConnectionStringModel.Provider);
 
                 var normalizedPlan = parser.Parse(originalMetrics);
 
@@ -83,7 +90,7 @@ namespace QueryOptimizer.Bll.Services
                     request.Sql);
 
                 await _adaptiveLearningService.ApplyHistoryToFindingsAsync(
-                    request.Provider,
+                    request.ConnectionStringModel.Provider,
                     findings,
                     cancellationToken);
 
@@ -98,7 +105,7 @@ namespace QueryOptimizer.Bll.Services
                 var candidates = _candidateGenerator.Generate(
                     request.Sql,
                     findings,
-                    request.Provider);
+                    request.ConnectionStringModel.Provider);
 
                 var candidateResults = await TestAndSaveCandidatesAsync(
                     executor,
@@ -109,7 +116,7 @@ namespace QueryOptimizer.Bll.Services
                     cancellationToken);
 
                 await _adaptiveLearningService.LearnFromCandidateResultsAsync(
-                    request.Provider,
+                    request.ConnectionStringModel.Provider,
                     normalizedSqlHash,
                     originalMetrics,
                     candidateResults,
@@ -310,6 +317,36 @@ namespace QueryOptimizer.Bll.Services
 
             return ((originalExecutionTimeMs - candidateExecutionTimeMs) /
                     originalExecutionTimeMs) * 100.0;
+        }
+
+        private string CreateConnectionString(ConnectionStringModel model)
+        {
+            IConnectionStringFactory connectionStringFactory = CreateConnectionStringFactory(model.Provider);
+            string connectionString = connectionStringFactory.Create(
+                model.ServerName,
+                model.UserName,
+                model.Password,
+                model.DatabaseName,
+                model.Host,
+                model.Port,
+                model.ServiceName
+                );
+
+            return connectionString;
+        }
+
+        private IConnectionStringFactory CreateConnectionStringFactory(DatabaseTypes provider)
+        {
+            switch (provider)
+            {
+                case DatabaseTypes.SqlServer:
+                    return new SqlServerConnectionStringFactory();
+                case DatabaseTypes.PostgreSql:
+                    return new PostgreSqlConnectionStringFactory();
+                case DatabaseTypes.Oracle:
+                    return new OracleConnectionStringFactory();
+                default: throw new NotSupportedDBTypeException();
+            }
         }
 
         private static List<IOptimizationRule> GetOptimizationRules()
