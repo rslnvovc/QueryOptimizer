@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { finalize } from 'rxjs';
+import { ConnectionStringModel } from '../../models/connectionStringModel';
 
 @Component({
   selector: 'app-analyzer',
@@ -19,8 +20,16 @@ export class Analyzer {
 
   provider = DatabaseTypes.SqlServer;
 
-  connectionString =
-    'Data Source=localhost\\SQLEXPRESS;Initial Catalog=master;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;';
+  connectionStringModel: ConnectionStringModel = {
+    provider: DatabaseTypes.SqlServer,
+    serverName: 'localhost\\SQLEXPRESS',
+    databaseName: 'Northwind',
+    userName: null,
+    password: null,
+    host: null,
+    port: null,
+    serviceName: null
+  };
 
   sql = `SELECT ProductName, Total = SUM(Quantity)
 FROM Products P, [Order Details] OD, Orders O, Customers C
@@ -44,6 +53,93 @@ GROUP BY ProductName`;
     private readonly changeDetectorRef: ChangeDetectorRef
   ) {}
 
+  onProviderChange(provider: DatabaseTypes): void {
+    this.provider = provider;
+
+    if (provider === DatabaseTypes.SqlServer) {
+      this.connectionStringModel = {
+        provider,
+        serverName: 'localhost\\SQLEXPRESS',
+        databaseName: 'Northwind',
+        userName: null,
+        password: null,
+        host: null,
+        port: null,
+        serviceName: null
+      };
+
+      return;
+    }
+
+    if (provider === DatabaseTypes.PostgreSql) {
+      this.connectionStringModel = {
+        provider,
+        serverName: 'PostgreSQL',
+        host: 'localhost',
+        port: 5432,
+        databaseName: '',
+        userName: '',
+        password: '',
+        serviceName: null
+      };
+
+      return;
+    }
+
+    if (provider === DatabaseTypes.Oracle) {
+      this.connectionStringModel = {
+        provider,
+        serverName: null,
+        databaseName: null,
+        host: 'localhost',
+        port: 1521,
+        serviceName: 'orclpdb',
+        userName: '',
+        password: ''
+      };
+    }
+  }
+
+  isSqlServer(): boolean {
+    return this.connectionStringModel.provider === DatabaseTypes.SqlServer;
+  }
+
+  isPostgreSql(): boolean {
+    return this.connectionStringModel.provider === DatabaseTypes.PostgreSql;
+  }
+
+  isOracle(): boolean {
+    return this.connectionStringModel.provider === DatabaseTypes.Oracle;
+  }
+
+  get isConnectionModelValid(): boolean {
+    const model = this.connectionStringModel;
+
+    if (model.provider === DatabaseTypes.SqlServer) {
+      return this.hasValue(model.serverName) &&
+             this.hasValue(model.databaseName);
+    }
+
+    if (model.provider === DatabaseTypes.PostgreSql) {
+      return this.hasValue(model.serverName) &&
+             this.hasValue(model.databaseName) &&
+             this.hasValue(model.userName) &&
+             this.hasValue(model.password) &&
+             this.hasValue(model.host) &&
+             model.port != null;
+    }
+
+    if (model.provider === DatabaseTypes.Oracle) {
+      return this.hasValue(model.userName) &&
+             this.hasValue(model.password) &&
+             this.hasValue(model.host) &&
+             model.port != null &&
+             this.hasValue(model.serviceName);
+    }
+
+    return false;
+  }
+
   analyze(): void {
     const user = this.authService.getUser();
 
@@ -52,8 +148,13 @@ GROUP BY ProductName`;
       return;
     }
 
-    if (!this.connectionString.trim() || !this.sql.trim()) {
-      this.error = 'Connection string and SQL query are required.';
+    if (!this.sql.trim()) {
+      this.error = 'SQL query is required.';
+      return;
+    }
+
+    if (!this.isConnectionModelValid) {
+      this.error = 'Please fill all required database connection fields.';
       return;
     }
 
@@ -62,35 +163,31 @@ GROUP BY ProductName`;
     this.result = null;
 
     this.apiService.analyze({
-  userId: user.id,
-  provider: this.provider,
-  connectionString: this.connectionString,
-  sql: this.sql
-})
-.pipe(
-  finalize(() => {
-    this.loading = false;
-    this.changeDetectorRef.detectChanges();
-  })
-)
-.subscribe({
-  next: result => {
-    console.log('Analyze result:', result);
-
-    this.result = result;
-
-    console.log('Component result after assign:', this.result);
-
-    this.changeDetectorRef.detectChanges();
-  },
-  error: err => {
-    console.error('Analyze error:', err);
-
-    this.error = err?.error?.message ?? 'Query analysis failed.';
-
-    this.changeDetectorRef.detectChanges();
+      userId: user.id,
+      connectionStringModel: this.connectionStringModel,
+      sql: this.sql,
+      //parameters: {}
+    })
+    .pipe(
+      finalize(() => {
+        this.loading = false;
+        this.changeDetectorRef.detectChanges();
+      })
+    )
+    .subscribe({
+      next: result => {
+        this.result = result;
+        this.changeDetectorRef.detectChanges();
+      },
+      error: err => {
+        this.error = err?.error?.message ?? 'Query analysis failed.';
+        this.changeDetectorRef.detectChanges();
+      }
+    });
   }
-});
+
+  goToHistory(): void {
+    this.router.navigate(['/history']);
   }
 
   logout(): void {
@@ -98,7 +195,7 @@ GROUP BY ProductName`;
     this.router.navigate(['/login']);
   }
 
-  goToHistory(): void {
-    this.router.navigate(['/history']);
+  private hasValue(value?: string | null): boolean {
+    return value !== null && value !== undefined && value.trim().length > 0;
   }
 }

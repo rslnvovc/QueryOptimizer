@@ -1,8 +1,8 @@
+import { ConnectionStringModel } from "./connectionStringModel";
 import { DatabaseTypes } from "./databaseType";
 
 export interface QueryOptimizationRequest {
   userId: number;
-  provider: DatabaseTypes;
-  connectionString: string;
+  connectionStringModel: ConnectionStringModel;
   sql: string;
 }

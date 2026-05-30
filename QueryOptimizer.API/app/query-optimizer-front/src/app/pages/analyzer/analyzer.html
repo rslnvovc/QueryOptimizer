@@ -35,7 +35,7 @@
 
           <div class="space-y-4">
             <div>
-              <label class="block text-sm font-medium text-slate-700 mb-1">
+              <!-- <label class="block text-sm font-medium text-slate-700 mb-1">
                 Database provider
               </label>
 
@@ -51,15 +51,207 @@
             <div>
               <label class="block text-sm font-medium text-slate-700 mb-1">
                 Target database connection string
-              </label>
+              </label> -->
 
-              <input
-                [(ngModel)]="connectionString"
-                class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Data Source=localhost\\SQLEXPRESS;Initial Catalog=Northwind;..."
-              />
-            </div>
+              <div>
+  <label class="block text-sm font-medium text-slate-700 mb-1">
+    Database provider
+  </label>
 
+  <select
+    [(ngModel)]="connectionStringModel.provider"
+    (ngModelChange)="onProviderChange($event)"
+    name="provider"
+    class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500">
+    <option [ngValue]="DatabaseTypes.SqlServer">SQL Server</option>
+    <option [ngValue]="DatabaseTypes.PostgreSql">PostgreSQL</option>
+    <option [ngValue]="DatabaseTypes.Oracle">Oracle</option>
+  </select>
+    </div>
+    
+    <!-- SQL Server fields -->
+    <div *ngIf="isSqlServer()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">
+        Server name <span class="text-red-500">*</span>
+        </label>
+    
+        <input
+        [(ngModel)]="connectionStringModel.serverName"
+        name="sqlServerServerName"
+        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="localhost\\SQLEXPRESS"
+        />
+    </div>
+    
+    <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">
+        Database name <span class="text-red-500">*</span>
+        </label>
+    
+        <input
+        [(ngModel)]="connectionStringModel.databaseName"
+        name="sqlServerDatabaseName"
+        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="Northwind"
+        />
+    </div>
+    </div>
+    
+    <!-- PostgreSQL fields -->
+    <div *ngIf="isPostgreSql()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">
+        Server name <span class="text-red-500">*</span>
+        </label>
+    
+        <input
+        [(ngModel)]="connectionStringModel.serverName"
+        name="postgresServerName"
+        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="PostgreSQL"
+        />
+    </div>
+    
+    <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">
+        Host <span class="text-red-500">*</span>
+        </label>
+    
+        <input
+        [(ngModel)]="connectionStringModel.host"
+        name="postgresHost"
+        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="localhost"
+        />
+    </div>
+    
+    <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">
+        Port <span class="text-red-500">*</span>
+        </label>
+    
+        <input
+        type="number"
+        [(ngModel)]="connectionStringModel.port"
+        name="postgresPort"
+        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="5432"
+        />
+    </div>
+    
+    <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">
+        Database name <span class="text-red-500">*</span>
+        </label>
+    
+        <input
+        [(ngModel)]="connectionStringModel.databaseName"
+        name="postgresDatabaseName"
+        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="northwind"
+        />
+    </div>
+    
+    <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">
+        Username <span class="text-red-500">*</span>
+        </label>
+    
+        <input
+        [(ngModel)]="connectionStringModel.userName"
+        name="postgresUserName"
+        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="postgres"
+        />
+    </div>
+    
+    <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">
+        Password <span class="text-red-500">*</span>
+        </label>
+    
+        <input
+        type="password"
+        [(ngModel)]="connectionStringModel.password"
+        name="postgresPassword"
+        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="password"
+        />
+    </div>
+    </div>
+    
+    <!-- Oracle fields -->
+    <div *ngIf="isOracle()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">
+        Host <span class="text-red-500">*</span>
+        </label>
+    
+        <input
+        [(ngModel)]="connectionStringModel.host"
+        name="oracleHost"
+        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="localhost"
+        />
+    </div>
+    
+    <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">
+        Port <span class="text-red-500">*</span>
+        </label>
+    
+        <input
+        type="number"
+        [(ngModel)]="connectionStringModel.port"
+        name="oraclePort"
+        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="1521"
+        />
+    </div>
+    
+    <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">
+        Service name <span class="text-red-500">*</span>
+        </label>
+    
+        <input
+        [(ngModel)]="connectionStringModel.serviceName"
+        name="oracleServiceName"
+        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="orclpdb"
+        />
+    </div>
+    
+    <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">
+        Username <span class="text-red-500">*</span>
+        </label>
+    
+        <input
+        [(ngModel)]="connectionStringModel.userName"
+        name="oracleUserName"
+        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="oe"
+        />
+    </div>
+    
+    <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">
+        Password <span class="text-red-500">*</span>
+        </label>
+    
+        <input
+        type="password"
+        [(ngModel)]="connectionStringModel.password"
+        name="oraclePassword"
+        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="password"
+        />
+    </div>
+    </div>
+                </div>
+    
             <div>
               <label class="block text-sm font-medium text-slate-700 mb-1">
                 SQL query
@@ -75,9 +267,9 @@
 
             <button
               (click)="analyze()"
-              [disabled]="loading"
+              [disabled]="loading || !isConnectionModelValid"
               class="w-full rounded-xl bg-blue-600 text-white py-3 font-medium hover:bg-blue-700 disabled:opacity-50">
-              {{ loading ? 'Analyzing...' : 'Analyze query' }}
+              {{ loading ? 'Analyzing...' : 'Analyze query' }}    
             </button>
 
             <p *ngIf="error" class="text-sm text-red-600">
