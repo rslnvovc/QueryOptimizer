@@ -3,7 +3,7 @@
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div>
             <h1 class="text-xl font-bold text-slate-900">Query Optimizer</h1>
-            <p class="text-sm text-slate-500">SQL analysis and adaptive recommendations</p>
+            <p class="text-sm text-slate-500">Аналіз SQL та рекомендації щодо покращення</p>
           </div>
 
           <div class="flex items-center gap-4">
@@ -15,13 +15,13 @@
               type="button"
               (click)="goToHistory()"
               class="rounded-lg border border-slate-300 px-4 py-2 text-sm hover:bg-slate-50">
-              History
+              Історія
             </button>
 
             <button
               (click)="logout()"
               class="rounded-lg border border-slate-300 px-4 py-2 text-sm hover:bg-slate-50">
-              Logout
+              Вийти
             </button>
           </div>
         </div>
@@ -30,7 +30,7 @@
       <main class="max-w-7xl mx-auto px-6 py-8 grid grid-cols-1 xl:grid-cols-2 gap-6">
         <section class="bg-white rounded-2xl shadow p-6">
           <h2 class="text-lg font-semibold text-slate-900 mb-4">
-            Analyze SQL query
+            Аналіз SQL - запиту
           </h2>
 
           <div class="space-y-4">
@@ -55,7 +55,7 @@
 
               <div>
   <label class="block text-sm font-medium text-slate-700 mb-1">
-    Database provider
+    Провайдер бази даних
   </label>
 
   <select
@@ -73,7 +73,7 @@
     <div *ngIf="isSqlServer()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <div>
         <label class="block text-sm font-medium text-slate-700 mb-1">
-        Server name <span class="text-red-500">*</span>
+        Сервер <span class="text-red-500">*</span>
         </label>
     
         <input
@@ -86,7 +86,7 @@
     
     <div>
         <label class="block text-sm font-medium text-slate-700 mb-1">
-        Database name <span class="text-red-500">*</span>
+        База даних <span class="text-red-500">*</span>
         </label>
     
         <input
@@ -102,7 +102,7 @@
     <div *ngIf="isPostgreSql()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <div>
         <label class="block text-sm font-medium text-slate-700 mb-1">
-        Server name <span class="text-red-500">*</span>
+        Сервер <span class="text-red-500">*</span>
         </label>
     
         <input
@@ -115,7 +115,7 @@
     
     <div>
         <label class="block text-sm font-medium text-slate-700 mb-1">
-        Host <span class="text-red-500">*</span>
+        Хост <span class="text-red-500">*</span>
         </label>
     
         <input
@@ -128,7 +128,7 @@
     
     <div>
         <label class="block text-sm font-medium text-slate-700 mb-1">
-        Port <span class="text-red-500">*</span>
+        Порт <span class="text-red-500">*</span>
         </label>
     
         <input
@@ -142,7 +142,7 @@
     
     <div>
         <label class="block text-sm font-medium text-slate-700 mb-1">
-        Database name <span class="text-red-500">*</span>
+        База даних <span class="text-red-500">*</span>
         </label>
     
         <input
@@ -168,7 +168,7 @@
     
     <div>
         <label class="block text-sm font-medium text-slate-700 mb-1">
-        Password <span class="text-red-500">*</span>
+        Пароль <span class="text-red-500">*</span>
         </label>
     
         <input
@@ -185,7 +185,7 @@
     <div *ngIf="isOracle()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <div>
         <label class="block text-sm font-medium text-slate-700 mb-1">
-        Host <span class="text-red-500">*</span>
+        Хост <span class="text-red-500">*</span>
         </label>
     
         <input
@@ -198,7 +198,7 @@
     
     <div>
         <label class="block text-sm font-medium text-slate-700 mb-1">
-        Port <span class="text-red-500">*</span>
+        Порт <span class="text-red-500">*</span>
         </label>
     
         <input
@@ -238,7 +238,7 @@
     
     <div>
         <label class="block text-sm font-medium text-slate-700 mb-1">
-        Password <span class="text-red-500">*</span>
+        Пароль <span class="text-red-500">*</span>
         </label>
     
         <input
@@ -254,7 +254,7 @@
     
             <div>
               <label class="block text-sm font-medium text-slate-700 mb-1">
-                SQL query
+                SQL - запит
               </label>
 
               <textarea
@@ -269,7 +269,7 @@
               (click)="analyze()"
               [disabled]="loading || !isConnectionModelValid"
               class="w-full rounded-xl bg-blue-600 text-white py-3 font-medium hover:bg-blue-700 disabled:opacity-50">
-              {{ loading ? 'Analyzing...' : 'Analyze query' }}    
+              {{ loading ? 'иконується аналіз...' : 'Аналізувати запит' }}    
             </button>
 
             <p *ngIf="error" class="text-sm text-red-600">
@@ -280,33 +280,33 @@
 
         <section class="space-y-6">
   <div *ngIf="!result" class="bg-white rounded-2xl shadow p-6 text-slate-500">
-    Results will appear here after analysis.
+    Результат буде відображено тут після виконання аналізу.
   </div>
 
   <ng-container *ngIf="result as r">
     <!-- Analysis summary -->
     <div class="bg-white rounded-2xl shadow p-6">
       <h2 class="text-lg font-semibold text-slate-900 mb-4">
-        Analysis summary
+        Результат аналізу
       </h2>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
         <div class="rounded-xl bg-slate-50 p-4">
-          <p class="text-xs text-slate-500">Analysis run ID</p>
+          <p class="text-xs text-slate-500">ID запуску аналізу</p>
           <p class="text-lg font-bold text-slate-900">
             {{ r.analysisRunId }}
           </p>
         </div>
 
         <div class="rounded-xl bg-slate-50 p-4">
-          <p class="text-xs text-slate-500">Findings count</p>
+          <p class="text-xs text-slate-500">Кількість виявлених проблем</p>
           <p class="text-lg font-bold text-slate-900">
             {{ r.findings?.length ?? 0 }}
           </p>
         </div>
 
         <div class="rounded-xl bg-slate-50 p-4">
-          <p class="text-xs text-slate-500">Candidates count</p>
+          <p class="text-xs text-slate-500">Кількість кандидатів SQL</p>
           <p class="text-lg font-bold text-slate-900">
             {{ r.candidateResults?.length ?? 0 }}
           </p>
@@ -317,7 +317,7 @@
     <!-- Original metrics -->
     <div class="bg-white rounded-2xl shadow p-6">
       <h2 class="text-lg font-semibold text-slate-900 mb-4">
-        Original query metrics
+        Метрики початкового запиту
       </h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
@@ -329,77 +329,77 @@
         </div>
 
         <div class="rounded-xl bg-slate-50 p-4">
-          <p class="text-xs text-slate-500">Provider</p>
+          <p class="text-xs text-slate-500">Провайдер</p>
           <p class="text-lg font-bold text-slate-900">
             {{ r.originalMetrics?.provider ?? '-' }}
           </p>
         </div>
 
         <div class="rounded-xl bg-slate-50 p-4">
-          <p class="text-xs text-slate-500">Client elapsed</p>
+          <p class="text-xs text-slate-500">Час виконання на клієнті</p>
           <p class="text-lg font-bold text-slate-900">
             {{ r.originalMetrics?.clientElapsedMs ?? '-' }} ms
           </p>
         </div>
 
         <div class="rounded-xl bg-slate-50 p-4">
-          <p class="text-xs text-slate-500">Database elapsed</p>
+          <p class="text-xs text-slate-500">Час виконання в БД</p>
           <p class="text-lg font-bold text-slate-900">
             {{ r.originalMetrics?.databaseElapsedMs ?? '-' }} ms
           </p>
         </div>
 
         <div class="rounded-xl bg-slate-50 p-4">
-          <p class="text-xs text-slate-500">CPU time</p>
+          <p class="text-xs text-slate-500">Процесорний час</p>
           <p class="text-lg font-bold text-slate-900">
             {{ r.originalMetrics?.cpuTimeMs ?? '-' }} ms
           </p>
         </div>
 
         <div class="rounded-xl bg-slate-50 p-4">
-          <p class="text-xs text-slate-500">Logical reads</p>
+          <p class="text-xs text-slate-500">Логічні читання</p>
           <p class="text-lg font-bold text-slate-900">
             {{ r.originalMetrics?.logicalReads ?? '-' }}
           </p>
         </div>
 
         <div class="rounded-xl bg-slate-50 p-4">
-          <p class="text-xs text-slate-500">Physical reads</p>
+          <p class="text-xs text-slate-500">Фізичні читання</p>
           <p class="text-lg font-bold text-slate-900">
             {{ r.originalMetrics?.physicalReads ?? '-' }}
           </p>
         </div>
 
         <div class="rounded-xl bg-slate-50 p-4">
-          <p class="text-xs text-slate-500">Rows returned</p>
+          <p class="text-xs text-slate-500">Повернуто записів</p>
           <p class="text-lg font-bold text-slate-900">
             {{ r.originalMetrics?.rowsReturned ?? '-' }}
           </p>
         </div>
 
         <div class="rounded-xl bg-slate-50 p-4">
-          <p class="text-xs text-slate-500">Rows affected</p>
+          <p class="text-xs text-slate-500">Змінено рядків</p>
           <p class="text-lg font-bold text-slate-900">
             {{ r.originalMetrics?.rowsAffected ?? '-' }}
           </p>
         </div>
 
         <div class="rounded-xl bg-slate-50 p-4">
-          <p class="text-xs text-slate-500">Estimated cost</p>
+          <p class="text-xs text-slate-500">Оцінена вартість</p>
           <p class="text-lg font-bold text-slate-900">
             {{ r.originalMetrics?.estimatedCost ?? '-' }}
           </p>
         </div>
 
         <div class="rounded-xl bg-slate-50 p-4">
-          <p class="text-xs text-slate-500">Planning time</p>
+          <p class="text-xs text-slate-500">Час планування</p>
           <p class="text-lg font-bold text-slate-900">
             {{ r.originalMetrics?.planningTimeMs ?? '-' }} ms
           </p>
         </div>
 
         <div class="rounded-xl bg-slate-50 p-4">
-          <p class="text-xs text-slate-500">Execution plan format</p>
+          <p class="text-xs text-slate-500">Формат плану виконання</p>
           <p class="text-lg font-bold text-slate-900">
             {{ r.originalMetrics?.executionPlanFormat ?? '-' }}
           </p>
@@ -408,7 +408,7 @@
 
       <div class="mt-4">
         <p class="text-sm font-medium text-slate-700 mb-1">
-          Original SQL
+          Початковий SQL - запит
         </p>
         <pre class="rounded-xl bg-slate-900 text-slate-100 p-4 overflow-auto text-xs">{{ r.originalMetrics?.originalSql ?? '-' }}</pre>
       </div>
@@ -417,33 +417,33 @@
     <!-- Normalized plan -->
     <div class="bg-white rounded-2xl shadow p-6">
       <h2 class="text-lg font-semibold text-slate-900 mb-4">
-        Normalized execution plan
+        Нормалізований план виконання
       </h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 mb-4">
         <div class="rounded-xl bg-slate-50 p-4">
-          <p class="text-xs text-slate-500">Provider</p>
+          <p class="text-xs text-slate-500">Провайдер</p>
           <p class="text-lg font-bold text-slate-900">
             {{ r.normalizedPlan?.provider ?? '-' }}
           </p>
         </div>
 
         <div class="rounded-xl bg-slate-50 p-4">
-          <p class="text-xs text-slate-500">Total cost</p>
+          <p class="text-xs text-slate-500">Загальна вартість</p>
           <p class="text-lg font-bold text-slate-900">
             {{ r.normalizedPlan?.totalCost ?? '-' }}
           </p>
         </div>
 
         <div class="rounded-xl bg-slate-50 p-4">
-          <p class="text-xs text-slate-500">Total logical reads</p>
+          <p class="text-xs text-slate-500">Загальна кількість логічних читань</p>
           <p class="text-lg font-bold text-slate-900">
             {{ r.normalizedPlan?.totalLogicalReads ?? '-' }}
           </p>
         </div>
 
         <div class="rounded-xl bg-slate-50 p-4">
-          <p class="text-xs text-slate-500">Plan nodes</p>
+          <p class="text-xs text-slate-500">Вузли плану</p>
           <p class="text-lg font-bold text-slate-900">
             {{ r.normalizedPlan?.nodes?.length ?? 0 }}
           </p>
@@ -452,7 +452,7 @@
 
       <div *ngIf="r.normalizedPlan?.nodes?.length" class="space-y-3">
         <h3 class="font-semibold text-slate-900">
-          Plan nodes
+          Вузли плану
         </h3>
 
         <div
@@ -462,10 +462,10 @@
           <div class="flex items-center justify-between gap-3 mb-3">
             <div>
               <p class="font-semibold text-slate-900">
-                {{ node.normalizedNodeType ?? node.nodeType ?? 'Unknown node' }}
+                {{ node.normalizedNodeType ?? node.nodeType ?? 'Невідомий вузол' }}
               </p>
               <p class="text-sm text-slate-500">
-                Raw node type: {{ node.nodeType ?? '-' }}
+                Початковий тип вузла: {{ node.nodeType ?? '-' }}
               </p>
             </div>
 
@@ -476,48 +476,48 @@
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
             <div>
-              <span class="text-slate-500">Object:</span>
+              <span class="text-slate-500">Об'єкт:</span>
               <span class="font-medium text-slate-900">{{ node.objectName ?? '-' }}</span>
             </div>
 
             <div>
-              <span class="text-slate-500">Index:</span>
+              <span class="text-slate-500">Індекс:</span>
               <span class="font-medium text-slate-900">{{ node.indexName ?? '-' }}</span>
             </div>
 
             <div>
-              <span class="text-slate-500">Estimated rows:</span>
+              <span class="text-slate-500">Оцінена кількість рядків:</span>
               <span class="font-medium text-slate-900">{{ node.estimatedRows ?? '-' }}</span>
             </div>
 
             <div>
-              <span class="text-slate-500">Actual rows:</span>
+              <span class="text-slate-500">Фактична кількість рядків:</span>
               <span class="font-medium text-slate-900">{{ node.actualRows ?? '-' }}</span>
             </div>
 
             <div>
-              <span class="text-slate-500">Estimated cost:</span>
+              <span class="text-slate-500">Оцінена вартість:</span>
               <span class="font-medium text-slate-900">{{ node.estimatedCost ?? '-' }}</span>
             </div>
 
             <div>
-              <span class="text-slate-500">Actual time:</span>
+              <span class="text-slate-500">Фактичний час:</span>
               <span class="font-medium text-slate-900">{{ node.actualTimeMs ?? '-' }} ms</span>
             </div>
 
             <div>
-              <span class="text-slate-500">Logical reads:</span>
+              <span class="text-slate-500">Логічні читання:</span>
               <span class="font-medium text-slate-900">{{ node.logicalReads ?? '-' }}</span>
             </div>
 
             <div>
-              <span class="text-slate-500">Physical reads:</span>
+              <span class="text-slate-500">Фізичні читання:</span>
               <span class="font-medium text-slate-900">{{ node.physicalReads ?? '-' }}</span>
             </div>
           </div>
 
           <div *ngIf="node.predicate" class="mt-3">
-            <p class="text-xs text-slate-500 mb-1">Predicate</p>
+            <p class="text-xs text-slate-500 mb-1">Предикат</p>
             <pre class="rounded-lg bg-slate-100 p-3 text-xs overflow-auto">{{ node.predicate }}</pre>
           </div>
         </div>
@@ -525,7 +525,7 @@
 
       <div *ngIf="r.normalizedPlan?.rawPlan" class="mt-4">
         <p class="text-sm font-medium text-slate-700 mb-1">
-          Raw normalized plan
+          Початковий нормалізований план
         </p>
         <pre class="max-h-[400px] rounded-xl bg-slate-900 text-slate-100 p-4 overflow-auto text-xs">{{ r.normalizedPlan?.rawPlan }}</pre>
       </div>
@@ -534,11 +534,11 @@
     <!-- Findings -->
     <div class="bg-white rounded-2xl shadow p-6">
       <h2 class="text-lg font-semibold text-slate-900 mb-4">
-        Recommendations / Findings
+        Рекомендації / Виявлені проблеми
       </h2>
 
       <div *ngIf="!r.findings || r.findings.length === 0" class="text-slate-500">
-        No findings detected.
+        Проблем не виявлено.
       </div>
 
       <div class="space-y-4">
@@ -558,33 +558,33 @@
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3 text-sm">
             <div>
-              <span class="text-slate-500">Severity:</span>
+              <span class="text-slate-500">Рівень важливості:</span>
               <span class="font-medium text-slate-900">{{ finding.severity }}</span>
             </div>
 
             <div>
-              <span class="text-slate-500">Confidence:</span>
+              <span class="text-slate-500">Впевненість:</span>
               <span class="font-medium text-slate-900">
                 {{ finding.confidence ?? '-' }}
               </span>
             </div>
 
             <div>
-              <span class="text-slate-500">Adaptive confidence:</span>
+              <span class="text-slate-500">Адаптивна впевненість:</span>
               <span class="font-medium text-slate-900">
                 {{ finding.adaptiveConfidence ?? '-' }}
               </span>
             </div>
 
             <div>
-              <span class="text-slate-500">Affected object:</span>
+              <span class="text-slate-500">Проблемний об'єкт:</span>
               <span class="font-medium text-slate-900">
                 {{ finding.affectedObject ?? '-' }}
               </span>
             </div>
 
             <div>
-              <span class="text-slate-500">Affected node type:</span>
+              <span class="text-slate-500">Тип проблемного вузла:</span>
               <span class="font-medium text-slate-900">
                 {{ finding.affectedNodeType ?? '-' }}
               </span>
@@ -601,14 +601,14 @@
 
           <div *ngIf="finding.suggestedSql" class="mt-4">
             <p class="text-sm font-medium text-slate-700 mb-1">
-              Suggested SQL
+              Запропонований SQL - запит
             </p>
             <pre class="rounded-xl bg-slate-900 text-slate-100 p-4 overflow-auto text-xs">{{ finding.suggestedSql }}</pre>
           </div>
 
           <div *ngIf="finding.suggestedIndexSql" class="mt-4">
             <p class="text-sm font-medium text-slate-700 mb-1">
-              Suggested index SQL
+              Запропонований SQL для індексу
             </p>
             <pre class="rounded-xl bg-slate-900 text-slate-100 p-4 overflow-auto text-xs">{{ finding.suggestedIndexSql }}</pre>
           </div>
@@ -619,16 +619,16 @@
     <!-- Best candidate -->
     <div *ngIf="r.bestCandidate" class="bg-white rounded-2xl shadow p-6 border border-green-300">
       <h2 class="text-lg font-semibold text-slate-900 mb-4">
-        Best candidate
+        Найкращий покращений варіант SQL 
       </h2>
 
       <p class="text-sm text-slate-600">
-        Rule:
+        Правило:
         <strong>{{ r.bestCandidate.ruleCode }}</strong>
       </p>
 
       <p class="text-sm text-slate-600 mt-1">
-        Improvement:
+        Покращення:
         <strong>
           {{ r.bestCandidate.improvementPercent != null ? (r.bestCandidate.improvementPercent | number:'1.1-2') + '%' : '-' }}
         </strong>
@@ -640,11 +640,11 @@
     <!-- Candidate results -->
     <div class="bg-white rounded-2xl shadow p-6">
       <h2 class="text-lg font-semibold text-slate-900 mb-4">
-        Tested candidates
+        Протестовані кандидати SQL - запитів
       </h2>
 
       <div *ngIf="!r.candidateResults || r.candidateResults.length === 0" class="text-slate-500">
-        No candidate SQL variants were generated or tested.
+        SQL - запити не були згенеровані або протестовані.
       </div>
 
       <div class="space-y-4">
@@ -662,7 +662,7 @@
             <span
               *ngIf="candidate.isBest"
               class="text-xs bg-green-100 text-green-700 rounded-full px-3 py-1">
-              Best
+              Найкращий
             </span>
           </div>
 
@@ -673,52 +673,52 @@
             </div>
 
             <div>
-              <span class="text-slate-500">Was tested:</span>
+              <span class="text-slate-500">Було протестовано:</span>
               <span class="font-medium text-slate-900">{{ candidate.wasTested }}</span>
             </div>
 
             <div>
-              <span class="text-slate-500">Improvement:</span>
+              <span class="text-slate-500">Покращення:</span>
               <span class="font-medium text-slate-900">
                 {{ candidate.improvementPercent != null ? (candidate.improvementPercent | number:'1.1-2') + '%' : '-' }}
               </span>
             </div>
 
             <div>
-              <span class="text-slate-500">Description:</span>
+              <span class="text-slate-500">Опис:</span>
               <span class="font-medium text-slate-900">{{ candidate.description ?? '-' }}</span>
             </div>
           </div>
 
           <div class="mt-4">
             <p class="text-sm font-medium text-slate-700 mb-1">
-              Candidate SQL
+              Покращений SQL
             </p>
             <pre class="rounded-xl bg-slate-900 text-slate-100 p-4 overflow-auto text-xs">{{ candidate.candidateSql }}</pre>
           </div>
 
           <div *ngIf="candidate.metrics" class="mt-4">
             <p class="text-sm font-medium text-slate-700 mb-2">
-              Candidate metrics
+              Метрики покращеного SQL - запиту
             </p>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div class="rounded-xl bg-slate-50 p-4">
-                <p class="text-xs text-slate-500">Client elapsed</p>
+                <p class="text-xs text-slate-500">Час виконання на клієнті</p>
                 <p class="font-bold text-slate-900">
                   {{ candidate.metrics.clientElapsedMs ?? '-' }} ms
                 </p>
               </div>
 
               <div class="rounded-xl bg-slate-50 p-4">
-                <p class="text-xs text-slate-500">Logical reads</p>
+                <p class="text-xs text-slate-500">Логічні читання</p>
                 <p class="font-bold text-slate-900">
                   {{ candidate.metrics.logicalReads ?? '-' }}
                 </p>
               </div>
 
               <div class="rounded-xl bg-slate-50 p-4">
-                <p class="text-xs text-slate-500">Rows returned</p>
+                <p class="text-xs text-slate-500">Повернуто записів</p>
                 <p class="font-bold text-slate-900">
                   {{ candidate.metrics.rowsReturned ?? '-' }}
                 </p>
@@ -732,7 +732,7 @@
     <!-- Raw execution plan -->
     <div *ngIf="r.originalMetrics?.executionPlan" class="bg-white rounded-2xl shadow p-6">
       <h2 class="text-lg font-semibold text-slate-900 mb-4">
-        Raw execution plan
+        Початковий план виконання
       </h2>
 
       <pre class="max-h-[500px] rounded-xl bg-slate-900 text-slate-100 p-4 overflow-auto text-xs">{{ r.originalMetrics.executionPlan }}</pre>
