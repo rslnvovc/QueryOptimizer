@@ -18,7 +18,7 @@ namespace QueryOptimizer.Optimization.Rules
             if (!OptimizationRuleHelper.IsSelectQuery(originalSql))
                 yield break;
 
-            if (!OptimizationRuleHelper.HasWhereClause(originalSql))
+            if (OptimizationRuleHelper.HasWhereClause(originalSql))
                 yield break;
 
             var hasLargeScan = plan.Nodes.Any(x =>
