@@ -28,9 +28,9 @@ namespace QueryOptimizer.Optimization.Rules
                 yield return new QueryOptimizationFinding()
                 { 
                     RuleCode = Rule,
-                    Title = "A huge difference between Estimated Rows and Actual Rows",
-                    Description = $"Optimizer expected {node.EstimatedRows} rows, but actual rows were {node.ActualRows}. Difference in {ratio.Value:F1} times",
-                    Recommendation = "Consider updating statistics on the involved tables, or check if there are any parameters sniffing issues.",
+                    Title = "Виявлено значну різницю між оціненою та фактичною кількістю рядків",
+                    Description = $"Оптимізатор очікував {node.EstimatedRows} рядків, але фактично було оброблено {node.ActualRows} рядків.\nРізниця становить {ratio.Value:F1} разів",
+                    Recommendation = "Рекомендується оновити статистику для відповідних таблиць або перевірити можливі проблеми parameter sniffing.",
                     AffectedObject = node.ObjectName,
                     AffectedNodeType = node.NodeType,
                     Severity = ratio.Value >= 100 ? FindingSeverity.High : FindingSeverity.Medium,

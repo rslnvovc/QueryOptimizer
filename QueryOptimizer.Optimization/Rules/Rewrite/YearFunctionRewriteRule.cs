@@ -52,7 +52,7 @@ namespace QueryOptimizer.Optimization.Rules.Rewrite
                 RuleCode = RuleCode,
                 OriginalSql = originalSql,
                 CandidateSql = candidateSql,
-                Description = "Replaced YEAR(column) filter with a date range condition.",
+                Description = "Фільтр YEAR(column) замінено на умову з діапазоном дат.",
                 IsSafeToBenchmark = true
             };
         }

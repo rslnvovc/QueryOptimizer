@@ -30,9 +30,9 @@ namespace QueryOptimizer.Optimization.Rules
                 yield return new QueryOptimizationFinding()
                 { 
                     RuleCode = Rule,
-                    Title = "Expensive Nested Loop Join Detected",
-                    Description = "Nested loop joins can be inefficient if the outer or inner dataset contains many rows.",
-                    Recommendation = "Check for indexes on JOIN columns. It is also worth checking the relevance of statistics and the selectivity of filtering conditions.",
+                    Title = "Виявлено дороговартісну операцію Nested Loop Join",
+                    Description = "З'єднання типу Nested Loop може бути неефективним, якщо зовнішній або внутрішній набір даних містить багато рядків.",
+                    Recommendation = "Перевірте наявність індексів на колонках, які використовуються в JOIN.\nТакож варто перевірити актуальність статистики та умови фільтрації.",
                     AffectedObject = node.ObjectName,
                     AffectedNodeType = node.NormalizedNodeType,
                     Severity = FindingSeverity.Medium,

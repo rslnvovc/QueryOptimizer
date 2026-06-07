@@ -21,9 +21,9 @@ namespace QueryOptimizer.Optimization.Rules
             yield return new QueryOptimizationFinding()
             { 
                 RuleCode = Rule,
-                Title = "Usage of SELECT *",
-                Description = "Using SELECT * can lead to inefficient queries as it retrieves all columns, including those that may not be needed. This can increase I/O and memory usage.",
-                Recommendation = "Specify only the columns that are necessary for your query instead of using SELECT *.",
+                Title = "Використання SELECT *",
+                Description = "Використання SELECT * може призводити до неефективного виконання запиту, оскільки повертаються всі колонки, включно з тими, які можуть бути непотрібними.\nЦе може збільшувати використання I/O та пам'яті.",
+                Recommendation = "Замість SELECT * вкажіть лише ті колонки, які необхідні для запиту.",
                 Severity = FindingSeverity.Medium,
                 Confidence = 0.95
             };

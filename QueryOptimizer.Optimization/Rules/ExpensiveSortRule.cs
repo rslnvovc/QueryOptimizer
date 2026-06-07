@@ -31,9 +31,9 @@ namespace QueryOptimizer.Optimization.Rules
                 yield return new QueryOptimizationFinding()
                 { 
                     RuleCode = Rule,
-                    Title = "Expensive Sort Detected",
-                    Description = $"The execution plan contains an expensive Sort operation for big amount of records.",
-                    Recommendation = $"If query often use ORDER BY clause, you need to consider index for some columns or decrease quantity of records for sorting.",
+                    Title = "Виявлено дороговартісну операцію сортування",
+                    Description = $"План виконання містить дорогу операцію Sort для великої кількості записів.",
+                    Recommendation = $"Якщо запит часто використовує ORDER BY, варто розглянути створення індексу для відповідних колонок або зменшити кількість записів, які потрібно сортувати.",
                     SuggestedIndexSql = string.Empty,
                     AffectedObject = node.ObjectName,
                     AffectedNodeType = node.NodeType,

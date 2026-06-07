@@ -111,7 +111,7 @@ namespace QueryOptimizer.Optimization.Rules.Rewrite
                 RuleCode = RuleCode,
                 OriginalSql = originalSql,
                 CandidateSql = candidateSql,
-                Description = "Converted old comma-separated joins to explicit INNER JOIN syntax.",
+                Description = "Старий синтаксис з'єднання через кому перетворено на явний синтаксис INNER JOIN.",
                 IsSafeToBenchmark = true
             };
         }

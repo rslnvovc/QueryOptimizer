@@ -32,9 +32,9 @@ namespace QueryOptimizer.Optimization.Rules
             yield return new QueryOptimizationFinding()
             {
                 RuleCode = Rule,
-                Title = "Missing WHERE clause in SELECT query",
-                Description = "The query is performing a full scan without a WHERE clause, which can lead to performance issues.",
-                Recommendation = "Consider adding a WHERE clause to filter the results and reduce the number of rows scanned.",
+                Title = "Відсутня умова WHERE у SELECT-запиті",
+                Description = "Запит виконує повне сканування без умови WHERE, що може призводити до проблем продуктивності.",
+                Recommendation = "Розгляньте можливість додати умову WHERE для фільтрації результатів і зменшення кількості рядків, які потрібно сканувати.",
                 Severity = FindingSeverity.Medium,
                 Confidence = 0.75
             };

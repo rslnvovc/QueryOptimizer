@@ -25,9 +25,9 @@ namespace QueryOptimizer.Optimization.Rules
                 yield return new QueryOptimizationFinding()
                 { 
                     RuleCode = Rule,
-                    Title = "Key Lookup Detected",
-                    Description = $"A Key Lookup operator was detected on object '{node.ObjectName}' using index '{node.IndexName}'. This operator can lead to performance issues if it retrieves a large number of rows.",
-                    Recommendation = "Consider creating a covering index that includes the columns needed by the query to avoid the Key Lookup operation.",
+                    Title = "Виявлено операцію Key Lookup",
+                    Description = $"У плані виконання виявлено оператор Key Lookup для об'єкта '{node.ObjectName}' з використанням індексу '{node.IndexName}'.\nЦей оператор може спричиняти проблеми продуктивності, якщо повертається велика кількість рядків.",
+                    Recommendation = "Розгляньте створення covering index, який включає колонки, необхідні запиту, щоб уникнути операції Key Lookup.",
                     AffectedObject = node.ObjectName,
                     AffectedNodeType = node.NodeType,
                     Severity = FindingSeverity.High,

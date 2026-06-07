@@ -25,9 +25,9 @@ namespace QueryOptimizer.Optimization.Rules
                 yield return new QueryOptimizationFinding()
                 { 
                     RuleCode = Rule,
-                    Title = "High Logical Reads / Buffer gets",
-                    Description = $"This query has a high number of logical reads ({node.LogicalReads.Value}) which can indicate inefficient query design or missing indexes.",
-                    Recommendation = "Review the execution plan to identify the source of high logical reads. Consider optimizing the query, adding appropriate indexes, or updating statistics.",
+                    Title = "Висока кількість логічних читань / Buffer gets",
+                    Description = $"Запит має високу кількість логічних читань ({node.LogicalReads.Value}), що може вказувати на неефективну структуру запиту або відсутність потрібних індексів.",
+                    Recommendation = "Перегляньте план виконання, щоб визначити джерело великої кількості логічних читань.\nРозгляньте оптимізацію запиту, додавання відповідних індексів або оновлення статистики.",
                     AffectedObject = node.ObjectName,
                     AffectedNodeType = node.NodeType,
                     Severity = FindingSeverity.High,

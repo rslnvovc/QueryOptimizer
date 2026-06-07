@@ -55,9 +55,9 @@ namespace QueryOptimizer.Optimization.Rules
             yield return new QueryOptimizationFinding()
             { 
                 RuleCode = Rule,
-                Title = $"Function '{detectedFunction}' used in WHERE clause",
-                Description = $"The function '{detectedFunction}' is used in the WHERE clause, which can prevent the use of indexes and lead to performance issues.",
-                Recommendation = $"Consider rewriting the query to avoid using the '{detectedFunction}' function in the WHERE clause. For example, if you're using '{detectedFunction}' on a column, try to compute the function's value in a derived column or use a different approach to filter the data.",
+                Title = $"Функція '{detectedFunction}' використовується в умові WHERE",
+                Description = $"Функція '{detectedFunction}' використовується в секції WHERE, що може заважати використанню індексів і призводити до проблем продуктивності.",
+                Recommendation = $"Розгляньте можливість переписати запит так, щоб не використовувати функцію '{detectedFunction}' у секції WHERE.\nНаприклад, якщо функція застосовується до колонки, спробуйте використовувати обчислювану колонку або інший підхід до фільтрації даних.",
                 Severity = FindingSeverity.High,
                 Confidence = 0.85
             };

@@ -26,9 +26,9 @@ namespace QueryOptimizer.Optimization.Rules
             yield return new QueryOptimizationFinding()
             {
                 RuleCode = Rule,
-                Title = "Leading Wildcard in LIKE",
-                Description = "Usually LIKE condition is not allow effectivly use indexes",
-                Recommendation = "Consider removing leading wildcard from LIKE condition or use full text search if applicable.",
+                Title = "Виявлено початковий wildcard у LIKE",
+                Description = "Умова LIKE із символом % на початку зазвичай не дозволяє ефективно використовувати індекси.",
+                Recommendation = "Розгляньте можливість прибрати початковий символ % з умови LIKE або використати повнотекстовий пошук, якщо це доречно.",
                 Severity = FindingSeverity.Medium,
                 Confidence = 0.9
             };

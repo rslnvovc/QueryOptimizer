@@ -29,7 +29,7 @@ namespace QueryOptimizer.Optimization.Rules
             yield return new QueryOptimizationFinding()
             {
                 RuleCode = Rule,
-                Title = "Implicit Join Detected",
+                Title = "Виявлено неявне з'єднання таблиць",
                 Description = "Query use old style of JOIN through comma in FROM and conditions in WHERE",
                 Recommendation = "Rewrite query to use explicit JOIN syntax for better readability and maintainability.",
                 Severity = FindingSeverity.Low,

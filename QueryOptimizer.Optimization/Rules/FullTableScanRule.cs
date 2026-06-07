@@ -34,11 +34,11 @@ namespace QueryOptimizer.Optimization.Rules
                 yield return new QueryOptimizationFinding
                 {
                     RuleCode = Rule,
-                    Title = "Full Table Scan Detected",
-                    Description = $"The execution plan contains a Full Table Scan on object '{node.ObjectName}' which is likely causing performance issues.",
+                    Title = "Виявлено повне сканування таблиці",
+                    Description = $"План виконання містить повне сканування об'єкта '{node.ObjectName}', що може спричиняти проблеми продуктивності.",
                     Recommendation = column != null
-                        ? $"Consider adding an index on column '{column}' of table '{node.ObjectName}' to improve query performance."
-                        : $"Consider adding appropriate indexes to the table '{node.ObjectName}' to avoid full table scans.",
+                        ? $"Розгляньте можливість додавання індексу для колонки '{column}' таблиці '{node.ObjectName}', щоб покращити продуктивність запиту."
+                        : $"Розгляньте можливість додавання відповідних індексів до таблиці '{node.ObjectName}', щоб уникнути повного сканування.",
                     SuggestedIndexSql = column != null
                         ? OptimizationRuleHelper.BuildCreateIndexSql(plan.Provider, node.ObjectName, column)
                         : string.Empty,
