@@ -30,8 +30,8 @@ namespace QueryOptimizer.Optimization.Rules
             {
                 RuleCode = Rule,
                 Title = "Виявлено неявне з'єднання таблиць",
-                Description = "Query use old style of JOIN through comma in FROM and conditions in WHERE",
-                Recommendation = "Rewrite query to use explicit JOIN syntax for better readability and maintainability.",
+                Description = "У запиті використано старий стиль JOIN: таблиці перелічені через кому у FROM, а умови з'єднання винесені у WHERE.",
+                Recommendation = "Перепишіть запит з використанням явного синтаксису JOIN для кращої читабельності та підтримуваності.",
                 Severity = FindingSeverity.Low,
                 Confidence = 0.9,
                 AdaptiveConfidence = 0.9
