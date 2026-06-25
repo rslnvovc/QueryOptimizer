@@ -129,6 +129,8 @@ namespace QueryOptimizer.Bll.Services
                 return new QueryOptimizationResult
                 {
                     AnalysisRunId = analysisRunId,
+                    ProviderName = request.ConnectionStringModel.Provider.ToString(),
+                    ExecutionPlanFormat = originalMetrics.ExecutionPlanFormat.ToString() ?? "Невідомо",
                     OriginalMetrics = originalMetrics,
                     NormalizedPlan = normalizedPlan,
                     Findings = findings,
@@ -363,7 +365,8 @@ namespace QueryOptimizer.Bll.Services
                 new BadCardinalityEstimatedRule(),
                 new ExpensiveNestedLoopRule(),
                 new HighLogicalReadsRule(),
-                new ImplicitJoinRule()
+                new ImplicitJoinRule(),
+                new UnnecessaryJoinRule()
             };
         }
     }

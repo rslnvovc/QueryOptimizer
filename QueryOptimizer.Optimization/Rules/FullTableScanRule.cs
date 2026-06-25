@@ -43,6 +43,8 @@ namespace QueryOptimizer.Optimization.Rules
                         ? OptimizationRuleHelper.BuildCreateIndexSql(plan.Provider, node.ObjectName, column)
                         : string.Empty,
                     Severity = FindingSeverity.High,
+                    AffectedObject = node.ObjectName,
+                    AffectedNodeType = node.NodeType,
                     Confidence = column == null ? 0.75 : 0.85
                 };
             }

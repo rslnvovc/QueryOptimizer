@@ -6,6 +6,10 @@ import { QueryPerformanceMetrics } from "./queryPerformanceMetrics";
 export interface QueryOptimizationResult {
   analysisRunId: number;
 
+  providerName: string;
+
+  executionPlanFormat: string;
+
   originalMetrics: QueryPerformanceMetrics;
 
   normalizedPlan?: NormalizedExecutionPlan | null;

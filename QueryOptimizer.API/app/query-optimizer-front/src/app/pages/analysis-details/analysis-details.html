@@ -1,0 +1,168 @@
+<div class="min-h-screen bg-slate-100">
+  <header class="bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div>
+        <h1 class="text-xl font-bold text-slate-900">Query Optimizer</h1>
+        <p class="text-sm text-slate-500">Деталі попереднього аналізу</p>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button
+          type="button"
+          (click)="goBack()"
+          class="rounded-lg border border-slate-300 px-4 py-2 text-sm hover:bg-slate-50">
+          Історія
+        </button>
+
+        <button
+          type="button"
+          (click)="goToAnalyzer()"
+          class="rounded-lg border border-slate-300 px-4 py-2 text-sm hover:bg-slate-50">
+          Аналіз
+        </button>
+
+        <button
+          type="button"
+          (click)="logout()"
+          class="rounded-lg border border-slate-300 px-4 py-2 text-sm hover:bg-slate-50">
+          Вийти
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 py-8">
+    <div *ngIf="loading" class="bg-white rounded-2xl shadow p-6 text-slate-500">
+      Завантаження деталей аналізу...
+    </div>
+
+    <div *ngIf="error" class="bg-white rounded-2xl shadow p-6 text-red-600">
+      {{ error }}
+    </div>
+
+    <div *ngIf="!loading && !error && details" class="space-y-6">
+
+      <section class="bg-white rounded-2xl shadow p-6">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h2 class="text-lg font-semibold text-slate-900">
+              Аналіз #{{ analysisRunId }}
+            </h2>
+
+            <p class="text-sm text-slate-500 mt-1">
+              Провайдер:
+              <span class="font-medium text-slate-700">
+                {{ getProviderName(run?.provider ?? metrics?.provider) }}
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-5 grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+          <div class="rounded-xl bg-slate-50 p-4" *ngIf="run?.status">
+            <div class="text-slate-500">Статус</div>
+            <div class="mt-1 font-semibold text-slate-900">{{ run.status }}</div>
+          </div>
+
+          <div class="rounded-xl bg-slate-50 p-4" *ngIf="run?.startedAt">
+            <div class="text-slate-500">Початок</div>
+            <div class="mt-1 font-semibold text-slate-900">
+              {{ run.startedAt | date:'short' }}
+            </div>
+          </div>
+
+          <div class="rounded-xl bg-slate-50 p-4" *ngIf="run?.finishedAt">
+            <div class="text-slate-500">Завершення</div>
+            <div class="mt-1 font-semibold text-slate-900">
+              {{ run.finishedAt | date:'short' }}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white rounded-2xl shadow p-6">
+        <h3 class="text-lg font-semibold text-slate-900 mb-4">
+          SQL-запит
+        </h3>
+
+        <pre class="rounded-xl bg-slate-950 text-slate-100 p-4 text-xs overflow-auto whitespace-pre-wrap">{{ run?.originalSql ?? metrics?.originalSql }}</pre>
+      </section>
+
+      <section class="bg-white rounded-2xl shadow p-6">
+        <h3 class="text-lg font-semibold text-slate-900 mb-4">
+          Рекомендації
+        </h3>
+
+        <div *ngIf="findings.length === 0" class="text-sm text-slate-500">
+          Рекомендацій не знайдено.
+        </div>
+
+        <div class="space-y-3" *ngIf="findings.length > 0">
+          <div
+            *ngFor="let finding of findings"
+            class="rounded-xl border border-slate-200 p-4">
+            <div class="flex items-center justify-between gap-3">
+              <h4 class="font-semibold text-slate-900">
+                {{ finding.title ?? finding.ruleCode }}
+              </h4>
+
+              <span class="text-xs rounded-full bg-slate-100 px-3 py-1 text-slate-600">
+                {{ finding.ruleCode }}
+              </span>
+            </div>
+
+            <p class="mt-2 text-sm text-slate-600" *ngIf="finding.description">
+              {{ finding.description }}
+            </p>
+
+            <p class="mt-2 text-sm text-blue-700" *ngIf="finding.recommendation">
+              {{ finding.recommendation }}
+            </p>
+
+            <pre
+              *ngIf="finding.suggestedSql"
+              class="mt-3 rounded-xl bg-slate-950 text-slate-100 p-4 text-xs overflow-auto whitespace-pre-wrap">{{ finding.suggestedSql }}</pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white rounded-2xl shadow p-6">
+        <h3 class="text-lg font-semibold text-slate-900 mb-4">
+          Кандидати оптимізації
+        </h3>
+
+        <div *ngIf="candidates.length === 0" class="text-sm text-slate-500">
+          Кандидатів оптимізації не знайдено.
+        </div>
+
+        <div class="space-y-3" *ngIf="candidates.length > 0">
+          <div
+            *ngFor="let candidate of candidates"
+            class="rounded-xl border border-slate-200 p-4">
+            <div class="text-sm text-slate-500 mb-2">
+              {{ candidate.description ?? candidate.ruleCode ?? 'Кандидат оптимізації' }}
+            </div>
+
+            <pre class="rounded-xl bg-slate-950 text-slate-100 p-4 text-xs overflow-auto whitespace-pre-wrap">{{ candidate.candidateSql ?? candidate.suggestedSql ?? candidate.sql }}</pre>
+          </div>
+        </div>
+      </section>
+
+      <section *ngIf="normalizedPlan" class="bg-white rounded-2xl shadow p-6">
+        <h3 class="text-lg font-semibold text-slate-900 mb-4">
+          Нормалізований план виконання
+        </h3>
+
+        <pre class="rounded-xl bg-slate-950 text-slate-100 p-4 text-xs overflow-auto whitespace-pre-wrap">{{ formatJson(normalizedPlan) }}</pre>
+      </section>
+
+      <section *ngIf="metrics?.executionPlan" class="bg-white rounded-2xl shadow p-6">
+        <h3 class="text-lg font-semibold text-slate-900 mb-4">
+          Raw execution plan
+        </h3>
+
+        <pre class="rounded-xl bg-slate-950 text-slate-100 p-4 text-xs overflow-auto whitespace-pre-wrap">{{ metrics.executionPlan }}</pre>
+      </section>
+    </div>
+  </main>
+</div>

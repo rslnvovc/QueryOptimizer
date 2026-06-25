@@ -11,6 +11,10 @@ namespace QueryOptimizer.Models.Application
     {
         public int AnalysisRunId { get; set; }
 
+        public string ProviderName { get; set; } = string.Empty;
+
+        public string ExecutionPlanFormat { get; set; } = string.Empty;
+
         public QueryPerformanceMetrics OriginalMetrics { get; set; } = default!;
 
         public NormalizedExecutionPlan NormalizedPlan { get; set; } = default!;

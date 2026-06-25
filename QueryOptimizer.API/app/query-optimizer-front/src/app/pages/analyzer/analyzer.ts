@@ -60,7 +60,7 @@ GROUP BY ProductName`;
       this.connectionStringModel = {
         provider,
         serverName: 'localhost\\SQLEXPRESS',
-        databaseName: 'Northwind',
+        databaseName: 'master',
         userName: null,
         password: null,
         host: null,

@@ -269,7 +269,7 @@
               (click)="analyze()"
               [disabled]="loading || !isConnectionModelValid"
               class="w-full rounded-xl bg-blue-600 text-white py-3 font-medium hover:bg-blue-700 disabled:opacity-50">
-              {{ loading ? 'иконується аналіз...' : 'Аналізувати запит' }}    
+              {{ loading ? 'Виконується аналіз...' : 'Аналізувати запит' }}    
             </button>
 
             <p *ngIf="error" class="text-sm text-red-600">
@@ -331,7 +331,7 @@
         <div class="rounded-xl bg-slate-50 p-4">
           <p class="text-xs text-slate-500">Провайдер</p>
           <p class="text-lg font-bold text-slate-900">
-            {{ r.originalMetrics?.provider ?? '-' }}
+            {{ r.providerName ?? '-' }}
           </p>
         </div>
 
@@ -371,37 +371,9 @@
         </div>
 
         <div class="rounded-xl bg-slate-50 p-4">
-          <p class="text-xs text-slate-500">Повернуто записів</p>
-          <p class="text-lg font-bold text-slate-900">
-            {{ r.originalMetrics?.rowsReturned ?? '-' }}
-          </p>
-        </div>
-
-        <div class="rounded-xl bg-slate-50 p-4">
-          <p class="text-xs text-slate-500">Змінено рядків</p>
-          <p class="text-lg font-bold text-slate-900">
-            {{ r.originalMetrics?.rowsAffected ?? '-' }}
-          </p>
-        </div>
-
-        <div class="rounded-xl bg-slate-50 p-4">
-          <p class="text-xs text-slate-500">Оцінена вартість</p>
-          <p class="text-lg font-bold text-slate-900">
-            {{ r.originalMetrics?.estimatedCost ?? '-' }}
-          </p>
-        </div>
-
-        <div class="rounded-xl bg-slate-50 p-4">
-          <p class="text-xs text-slate-500">Час планування</p>
-          <p class="text-lg font-bold text-slate-900">
-            {{ r.originalMetrics?.planningTimeMs ?? '-' }} ms
-          </p>
-        </div>
-
-        <div class="rounded-xl bg-slate-50 p-4">
           <p class="text-xs text-slate-500">Формат плану виконання</p>
           <p class="text-lg font-bold text-slate-900">
-            {{ r.originalMetrics?.executionPlanFormat ?? '-' }}
+            {{ r.executionPlanFormat ?? '-' }}
           </p>
         </div>
       </div>
